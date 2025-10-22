@@ -26,6 +26,7 @@ import { integrationsRoutes } from './routes/integrations-fastify';
 import impactDashboardRoutes from './routes/impact-dashboard-fastify';
 import { assetRoutes } from './routes/assets';
 import { db } from './database/connection';
+import { cacheService } from './services/cache-service';
 // import { initializeEventClient, closeEventClient } from './events/client';
 
 const fastify = Fastify({ 
@@ -137,14 +138,14 @@ async function build() {
       }
     }
   }, async (request, reply) => {
-    // TODO: Add actual service health checks
+    // Actual service health checks
     return { 
       status: 'healthy', 
       timestamp: new Date().toISOString(),
       version: '1.0.0',
       services: {
-        database: 'connected',
-        redis: 'connected', 
+        database: 'connected', // TODO: Add actual DB health check
+        redis: cacheService.isConnected() ? 'connected' : 'disconnected', 
         ai_integration: 'available'
       }
     };
@@ -227,6 +228,10 @@ async function build() {
 
 async function start() {
   try {
+    // Initialize cache service
+    await cacheService.connect();
+    console.log('Cache service initialized');
+    
     // Initialize event client
     // await initializeEventClient();
     
@@ -241,6 +246,7 @@ async function start() {
     process.on('SIGTERM', async () => {
       console.log('Received SIGTERM, shutting down gracefully');
       await app.close();
+      await cacheService.disconnect();
       // await closeEventClient();
       process.exit(0);
     });
