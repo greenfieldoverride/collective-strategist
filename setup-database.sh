@@ -21,35 +21,35 @@ echo -e "${YELLOW}📝 Generated secure password for collective_strategist user$
 
 # Check if user already exists
 echo -e "${BLUE}🔍 Checking if collective_strategist user exists...${NC}"
-if docker exec liberation-postgres psql -U liberation -t -c "SELECT 1 FROM pg_roles WHERE rolname='collective_strategist';" | grep -q 1; then
+if docker exec liberation-postgres psql -U liberation -d postgres -t -c "SELECT 1 FROM pg_roles WHERE rolname='collective_strategist';" | grep -q 1; then
     echo -e "${YELLOW}⚠️  User collective_strategist already exists${NC}"
     echo -e "${BLUE}🔄 Updating password...${NC}"
-    docker exec liberation-postgres psql -U liberation -c "ALTER USER collective_strategist WITH PASSWORD '$DB_PASSWORD';"
+    docker exec liberation-postgres psql -U liberation -d postgres -c "ALTER USER collective_strategist WITH PASSWORD '$DB_PASSWORD';"
 else
     echo -e "${BLUE}👤 Creating PostgreSQL user 'collective_strategist'...${NC}"
-    docker exec liberation-postgres psql -U liberation -c "CREATE USER collective_strategist WITH PASSWORD '$DB_PASSWORD';"
+    docker exec liberation-postgres psql -U liberation -d postgres -c "CREATE USER collective_strategist WITH PASSWORD '$DB_PASSWORD';"
 fi
 
 # Check if database already exists
 echo -e "${BLUE}🔍 Checking if collective_strategist database exists...${NC}"
-if docker exec liberation-postgres psql -U liberation -t -c "SELECT 1 FROM pg_database WHERE datname='collective_strategist';" | grep -q 1; then
+if docker exec liberation-postgres psql -U liberation -d postgres -t -c "SELECT 1 FROM pg_database WHERE datname='collective_strategist';" | grep -q 1; then
     echo -e "${YELLOW}⚠️  Database collective_strategist already exists${NC}"
     echo -e "${BLUE}🔄 Ensuring correct ownership...${NC}"
-    docker exec liberation-postgres psql -U liberation -c "ALTER DATABASE collective_strategist OWNER TO collective_strategist;"
+    docker exec liberation-postgres psql -U liberation -d postgres -c "ALTER DATABASE collective_strategist OWNER TO collective_strategist;"
 else
     echo -e "${BLUE}🗄️  Creating database 'collective_strategist'...${NC}"
-    docker exec liberation-postgres psql -U liberation -c "CREATE DATABASE collective_strategist OWNER collective_strategist;"
+    docker exec liberation-postgres psql -U liberation -d postgres -c "CREATE DATABASE collective_strategist OWNER collective_strategist;"
 fi
 
 echo -e "${BLUE}🔐 Ensuring permissions...${NC}"
-docker exec liberation-postgres psql -U liberation -c "GRANT ALL PRIVILEGES ON DATABASE collective_strategist TO collective_strategist;"
+docker exec liberation-postgres psql -U liberation -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE collective_strategist TO collective_strategist;"
 
 # Verify the setup
 echo -e "${BLUE}🔍 Verifying database setup...${NC}"
 echo "User verification:"
-docker exec liberation-postgres psql -U liberation -c "\du" | grep collective_strategist || echo "User not found in display"
+docker exec liberation-postgres psql -U liberation -d postgres -c "\du" | grep collective_strategist || echo "User not found in display"
 echo "Database verification:"
-docker exec liberation-postgres psql -U liberation -c "\l" | grep collective_strategist || echo "Database not found in display"
+docker exec liberation-postgres psql -U liberation -d postgres -c "\l" | grep collective_strategist || echo "Database not found in display"
 
 # Test connection
 echo -e "${BLUE}🧪 Testing connection...${NC}"

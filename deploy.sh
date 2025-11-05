@@ -48,7 +48,7 @@ fi
 
 # Check if collective_strategist database exists
 echo -e "${BLUE}🔍 Checking if collective_strategist database exists...${NC}"
-if ! docker exec liberation-postgres psql -U liberation -t -c "SELECT 1 FROM pg_database WHERE datname='collective_strategist';" | grep -q 1; then
+if ! docker exec liberation-postgres psql -U liberation -d postgres -t -c "SELECT 1 FROM pg_database WHERE datname='collective_strategist';" | grep -q 1; then
     echo -e "${RED}❌ collective_strategist database does not exist${NC}"
     echo -e "${YELLOW}Please run ./setup-database.sh first to create the database.${NC}"
     exit 1
