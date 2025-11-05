@@ -1,0 +1,69 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - heading "The Collective Strategist" [level=1] [ref=e6]
+      - button "🤝 Liberation Tech Collective Sovereign Circle Professional ▼" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: 🤝
+          - generic [ref=e13]:
+            - generic [ref=e14]: Liberation Tech Collective
+            - generic [ref=e15]: Sovereign Circle
+          - generic [ref=e16]: Professional
+        - generic [ref=e17]: ▼
+      - generic [ref=e18]:
+        - generic [ref=e19]: Welcome back, Test User! 👋
+        - button "TU" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: TU
+  - generic [ref=e23]:
+    - navigation [ref=e25]:
+      - button "Overview" [ref=e26] [cursor=pointer]:
+        - img [ref=e28]
+        - generic [ref=e32]: Overview
+      - button "Impact Dashboard" [ref=e33] [cursor=pointer]:
+        - img [ref=e35]
+        - generic [ref=e37]: Impact Dashboard
+      - button "AI Consultant" [ref=e38] [cursor=pointer]:
+        - img [ref=e40]
+        - generic [ref=e42]: AI Consultant
+      - button "Integration Hub" [active] [ref=e43] [cursor=pointer]:
+        - img [ref=e45]
+        - generic [ref=e48]: Integration Hub
+      - button "Team" [ref=e49] [cursor=pointer]:
+        - img [ref=e51]
+        - generic [ref=e56]: Team
+      - button "Billing" [ref=e57] [cursor=pointer]:
+        - img [ref=e59]
+        - generic [ref=e63]: Billing
+      - button "Content Studio" [ref=e64] [cursor=pointer]:
+        - img [ref=e66]
+        - generic [ref=e69]: Content Studio
+      - button "Social Media" [ref=e70] [cursor=pointer]:
+        - img [ref=e72]
+        - generic [ref=e74]: Social Media
+      - button "Calendar Hub" [ref=e75] [cursor=pointer]:
+        - img [ref=e77]
+        - generic [ref=e79]: Calendar Hub
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - heading "Integration Hub" [level=2] [ref=e83]
+        - paragraph [ref=e84]: Financial Liberation Tools for Liberation Tech Collective
+      - generic [ref=e85]:
+        - generic [ref=e87]:
+          - heading "Payment Integration Hub" [level=1] [ref=e88]
+          - paragraph [ref=e89]: Connect your payment platforms to automatically track your liberation work finances
+          - button "🎯 Start Integration Tour" [ref=e90]
+        - generic [ref=e92]:
+          - generic [ref=e93]: 🌱
+          - generic [ref=e94]:
+            - heading "Financial Liberation Tools" [level=3] [ref=e95]
+            - paragraph [ref=e96]: These integrations help you track income across platforms, understand platform dependency risks, and maintain financial sovereignty for your liberation work.
+        - generic [ref=e97]:
+          - heading "All Platforms Connected" [level=2] [ref=e98]
+          - generic [ref=e99]:
+            - generic [ref=e100]: 🎉
+            - paragraph [ref=e101]: Excellent work!
+            - paragraph [ref=e102]: You've connected all available payment platforms. Your financial liberation toolkit is complete!
+```

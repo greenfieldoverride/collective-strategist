@@ -1,0 +1,135 @@
+# Shared Infrastructure for Liberation Platform + The Collective Strategist
+# This compose file provides shared services (database, cache, monitoring) for both projects
+
+version: '3.8'
+
+services:
+  # ======================
+  # SHARED DATA LAYER
+  # ======================
+
+  # PostgreSQL Database - Shared by both projects with separate databases
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=shared_user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_MULTIPLE_DATABASES=liberation_platform,collective_strategist,collective_strategist_test
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+      - ./apps/api/src/database/schema.sql:/docker-entrypoint-initdb.d/collective-strategist-schema.sql
+      - ./apps/api/src/database/venture-schema.sql:/docker-entrypoint-initdb.d/collective-strategist-ventures.sql
+    networks:
+      - shared-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shared_user -d liberation_platform && pg_isready -U shared_user -d collective_strategist"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache & Sessions - Shared by both projects with different DB numbers
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    networks:
+      - shared-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # SHARED MONITORING
+  # ======================
+
+  # Prometheus - Metrics collection for both projects
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - shared-network
+    restart: unless-stopped
+
+  # Grafana - Shared dashboards for both projects
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - shared-network
+    restart: unless-stopped
+
+  # ======================
+  # SHARED REVERSE PROXY
+  # ======================
+
+  # Traefik - Routes traffic to both applications
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@greenfieldoverride.com}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_data:/letsencrypt
+    networks:
+      - shared-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.greenfieldoverride.com`)"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+
+networks:
+  shared-network:
+    driver: bridge
+    name: liberation-shared-network
+
+volumes:
+  postgres_data:
+    name: liberation-postgres-data
+  redis_data:
+    name: liberation-redis-data
+  prometheus_data:
+    name: liberation-prometheus-data
+  grafana_data:
+    name: liberation-grafana-data
+  traefik_data:
+    name: liberation-traefik-data

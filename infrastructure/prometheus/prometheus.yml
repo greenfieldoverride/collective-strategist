@@ -1,0 +1,99 @@
+# Liberation Stack - Prometheus Configuration
+# Metrics collection for all Liberation services
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'liberation'
+    environment: 'production'
+
+# Rule files for alerting
+rule_files:
+  - "rules/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 30s
+
+  # Liberation Guardian - Dependency Management
+  - job_name: 'liberation-guardian'
+    static_configs:
+      - targets: ['liberation-guardian:8080']
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    honor_labels: true
+
+  # Liberation AI - Vector Search
+  - job_name: 'liberation-ai'
+    static_configs:
+      - targets: ['liberation-ai:8081']
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    honor_labels: true
+
+  # Liberation Auth - Authentication
+  - job_name: 'liberation-auth'
+    static_configs:
+      - targets: ['liberation-auth:8082']
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    honor_labels: true
+
+  # PostgreSQL Database Metrics
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    scrape_interval: 30s
+    honor_labels: true
+
+  # Redis Cache Metrics  
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 30s
+    honor_labels: true
+
+  # Qdrant Vector Database Metrics
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant:6333']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    honor_labels: true
+
+  # Container Resource Metrics
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    scrape_interval: 30s
+    honor_labels: true
+
+  # Host System Metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 30s
+    honor_labels: true
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# Remote write configuration (for long-term storage)
+# Uncomment if using external TSDB like Grafana Cloud or Thanos
+# remote_write:
+#   - url: "https://prometheus-us-central1.grafana.net/api/prom/push"
+#     basic_auth:
+#       username: "your_username"
+#       password: "your_api_key"

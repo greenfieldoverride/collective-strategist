@@ -1,0 +1,441 @@
+version: '3.8'
+
+# Liberation Stack - Complete Docker Compose
+# Enterprise-grade services at startup costs
+# 
+# Services included:
+# - Liberation Guardian (dependency management)
+# - Liberation AI (vector search)  
+# - Liberation Auth (authentication)
+# - PostgreSQL (primary database)
+# - Redis (caching/sessions)
+# - Qdrant (vector database)
+# - Prometheus (metrics)
+# - Grafana (dashboards)
+# - Nginx (reverse proxy)
+
+services:
+  # ======================
+  # CORE LIBERATION SERVICES
+  # ======================
+
+  liberation-guardian:
+    build:
+      context: ./services/liberation-guardian
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://liberation:liberation123@postgres:5432/liberation_guardian
+      - REDIS_URL=redis://redis:6379/0
+      - GITHUB_TOKEN_FILE=/run/secrets/github_token
+      - LOG_LEVEL=info
+      - WEBHOOK_SECRET_FILE=/run/secrets/webhook_secret
+    secrets:
+      - github_token
+      - webhook_secret
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8080"
+      - "prometheus.path=/metrics"
+
+  liberation-ai:
+    build:
+      context: ./services/liberation-ai
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=postgres://liberation:liberation123@postgres:5432/liberation_ai
+      - REDIS_URL=redis://redis:6379/1
+      - QDRANT_URL=http://qdrant:6333
+      - LOG_LEVEL=info
+      - VECTOR_STORE_TYPE=qdrant
+      - DIMENSIONS=384
+    depends_on:
+      - postgres
+      - redis
+      - qdrant
+      - liberation-auth
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8081"
+
+  liberation-auth:
+    build:
+      context: ./services/liberation-auth
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - DATABASE_URL=postgres://liberation:liberation123@postgres:5432/liberation_auth
+      - REDIS_URL=redis://redis:6379/2
+      - JWT_SECRET_FILE=/run/secrets/jwt_secret
+      - PORT=8082
+      - LOG_LEVEL=info
+      - RATE_LIMIT_ENABLED=true
+      - METRICS_ENABLED=true
+    secrets:
+      - jwt_secret
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true" 
+      - "prometheus.port=8082"
+
+  # ======================
+  # DATA LAYER
+  # ======================
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=liberation
+      - POSTGRES_PASSWORD=liberation123
+      - POSTGRES_DB=liberation_main
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U liberation"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+      - ./infrastructure/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__LOG_LEVEL=INFO
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ======================
+  # REVERSE PROXY
+  # ======================
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8090:80"
+      - "8443:443"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./infrastructure/nginx/conf.d:/etc/nginx/conf.d
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - liberation-guardian
+      - liberation-ai  
+      - liberation-auth
+    networks:
+      - liberation-network
+    restart: unless-stopped
+
+  # ======================
+  # MONITORING STACK
+  # ======================
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./infrastructure/prometheus/rules:/etc/prometheus/rules
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    networks:
+      - liberation-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3003:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=liberation123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_DOMAIN=grafana.liberation.local
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./infrastructure/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - liberation-network
+    restart: unless-stopped
+
+  # Self-hosted Sentry for error tracking
+  sentry:
+    image: getsentry/sentry:latest
+    ports:
+      - "9000:9000"
+    environment:
+      - SENTRY_SECRET_KEY=your_sentry_secret_key_here_32_chars_min
+      - SENTRY_POSTGRES_HOST=postgres
+      - SENTRY_POSTGRES_PORT=5432
+      - SENTRY_DB_NAME=sentry
+      - SENTRY_DB_USER=liberation
+      - SENTRY_DB_PASSWORD=liberation123
+      - SENTRY_REDIS_HOST=redis
+      - SENTRY_REDIS_PORT=6379
+      - SENTRY_REDIS_DB=3
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    volumes:
+      - sentry_data:/data
+
+  sentry-worker:
+    image: getsentry/sentry:latest
+    command: run worker
+    environment:
+      - SENTRY_SECRET_KEY=your_sentry_secret_key_here_32_chars_min
+      - SENTRY_POSTGRES_HOST=postgres
+      - SENTRY_POSTGRES_PORT=5432
+      - SENTRY_DB_NAME=sentry
+      - SENTRY_DB_USER=liberation
+      - SENTRY_DB_PASSWORD=liberation123
+      - SENTRY_REDIS_HOST=redis
+      - SENTRY_REDIS_PORT=6379
+      - SENTRY_REDIS_DB=3
+    depends_on:
+      - postgres
+      - redis
+      - sentry
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    volumes:
+      - sentry_data:/data
+
+  sentry-cron:
+    image: getsentry/sentry:latest
+    command: run cron
+    environment:
+      - SENTRY_SECRET_KEY=your_sentry_secret_key_here_32_chars_min
+      - SENTRY_POSTGRES_HOST=postgres
+      - SENTRY_POSTGRES_PORT=5432
+      - SENTRY_DB_NAME=sentry
+      - SENTRY_DB_USER=liberation
+      - SENTRY_DB_PASSWORD=liberation123
+      - SENTRY_REDIS_HOST=redis
+      - SENTRY_REDIS_PORT=6379
+      - SENTRY_REDIS_DB=3
+    depends_on:
+      - postgres
+      - redis
+      - sentry
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    volumes:
+      - sentry_data:/data
+
+  # ======================
+  # METRICS EXPORTERS
+  # ======================
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    environment:
+      - DATA_SOURCE_NAME=postgresql://liberation:liberation123@postgres:5432/liberation_main?sslmode=disable
+    ports:
+      - "9187:9187"
+    depends_on:
+      - postgres
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=9187"
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    environment:
+      - REDIS_ADDR=redis://redis:6379
+    ports:
+      - "9121:9121"
+    depends_on:
+      - redis
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=9121"
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=9100"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8085:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8080"
+
+  # ======================
+  # DEVELOPMENT TOOLS
+  # ======================
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8083:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    depends_on:
+      - postgres
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    profiles: ["dev", "debug"]
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8084:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    profiles: ["dev", "debug"]
+
+# ======================
+# NETWORKING
+# ======================
+
+networks:
+  liberation-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+# ======================
+# PERSISTENT VOLUMES
+# ======================
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  qdrant_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  sentry_data:
+    driver: local
+
+# ======================
+# SECRETS
+# ======================
+
+secrets:
+  github_token:
+    file: ./secrets/github_token.txt
+  webhook_secret:
+    file: ./secrets/webhook_secret.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt
+
+# ======================
+# PROFILES FOR DIFFERENT DEPLOYMENTS
+# ======================
+
+# Production: docker-compose up -d
+# Development: docker-compose --profile dev up -d  
+# Debug: docker-compose --profile debug up -d

@@ -1,0 +1,56 @@
+# OAuth2/OIDC Test Dockerfile for Nuclear AO3 Auth Service
+FROM golang:1.21-alpine AS test-base
+
+# Install necessary packages
+RUN apk add --no-cache \
+    git \
+    make \
+    bash \
+    curl \
+    postgresql-client \
+    redis \
+    jq
+
+# Set working directory
+WORKDIR /app
+
+# Copy go mod files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Install testing tools
+RUN go install github.com/stretchr/testify@latest
+RUN go install gotest.tools/gotestsum@latest
+
+# Copy shared modules
+COPY shared/ ./shared/
+
+# Copy auth service
+COPY auth-service/ ./auth-service/
+
+# Set working directory to auth service
+WORKDIR /app/auth-service
+
+# Create test results directory
+RUN mkdir -p /app/test-results
+
+# Make test runner executable
+RUN chmod +x run_oauth_tests.sh
+
+# Default command runs the comprehensive OAuth2/OIDC test suite
+CMD ["./run_oauth_tests.sh"]
+
+# Test stages for different test types
+FROM test-base AS oauth-tests
+CMD ["go", "test", "-v", "-timeout=10m", "./oauth_test.go"]
+
+FROM test-base AS oidc-tests  
+CMD ["go", "test", "-v", "-timeout=10m", "./oidc_test.go"]
+
+FROM test-base AS performance-tests
+CMD ["go", "test", "-v", "-timeout=15m", "./oauth_performance_test.go"]
+
+FROM test-base AS coverage-tests
+CMD ["sh", "-c", "go test -coverprofile=coverage.out -covermode=count ./... && go tool cover -html=coverage.out -o /app/test-results/coverage.html && go tool cover -func=coverage.out"]

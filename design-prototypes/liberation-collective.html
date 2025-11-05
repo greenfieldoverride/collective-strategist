@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberation Collective - Design Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Liberation Collective Color Palette */
+            --primary-forest: #1B4332;
+            --primary-orange: #FF6B35;
+            --secondary-terracotta: #E07A5F;
+            --secondary-sage: #81B29A;
+            --accent-yellow: #FFD23F;
+            --warm-cream: #FFF8F0;
+            --soft-green: #F1F8E9;
+            --text-dark: #2D3748;
+            --text-light: #718096;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--warm-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-forest) 0%, var(--secondary-sage) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-2%, -2%) rotate(0deg); }
+            50% { transform: translate(2%, 2%) rotate(180deg); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            background: var(--primary-orange);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+        }
+
+        .dashboard-preview {
+            max-width: 1200px;
+            margin: -3rem auto 0;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 3px solid var(--accent-yellow);
+        }
+
+        .dashboard-nav {
+            background: var(--soft-green);
+            padding: 2rem;
+            border-bottom: 2px solid var(--secondary-sage);
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-forest);
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            color: var(--primary-forest);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.2);
+        }
+
+        .nav-item.active {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .dashboard-content {
+            padding: 2.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, white 0%, var(--soft-green) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--secondary-sage);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--accent-yellow) 0%, transparent 70%);
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(27, 67, 50, 0.15);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.6;
+            transform: scale(1.5);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-forest);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .community-section {
+            background: var(--primary-forest);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .community-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            color: var(--accent-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .community-text {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-yellow);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-items {
+                flex-direction: column;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>The Liberation Collective</h1>
+        <p class="subtitle">Where sovereign professionals build the future together</p>
+        <button class="cta-button">Join the Movement</button>
+    </div>
+
+    <div class="dashboard-preview">
+        <div class="dashboard-card">
+            <div class="dashboard-nav">
+                <div class="nav-title">Your Liberation Dashboard</div>
+                <div class="nav-items">
+                    <a href="#" class="nav-item active">🌱 Overview</a>
+                    <a href="#" class="nav-item">🤖 AI Strategist</a>
+                    <a href="#" class="nav-item">✍️ Content Studio</a>
+                    <a href="#" class="nav-item">📱 Social Hub</a>
+                    <a href="#" class="nav-item">🤝 Community</a>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <h2 style="color: var(--primary-forest); font-size: 2rem; margin-bottom: 1rem;">Welcome back, Changemaker!</h2>
+                <p style="color: var(--text-light); font-size: 1.1rem;">Your tools for building independent, sustainable work</p>
+                
+                <div class="content-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🌿</div>
+                        <div class="feature-title">Impact Tracking</div>
+                        <div class="feature-description">Measure your real-world impact beyond just revenue. Track community building, knowledge sharing, and liberation progress.</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <div class="feature-title">AI Liberation Strategist</div>
+                        <div class="feature-description">Get strategic advice that prioritizes your independence and values over pure profit maximization.</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">✊</div>
+                        <div class="feature-title">Anti-Corporate Tools</div>
+                        <div class="feature-description">Content creation and social media tools designed for authentic voices, not corporate manipulation.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="community-section">
+        <h3 class="community-title">Built by the community, for the community</h3>
+        <p class="community-text">No VC funding. No exploitation. No data harvesting. Just tools that help independent professionals thrive on their own terms.</p>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">1,247</div>
+                <div class="stat-label">Liberation Warriors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">89%</div>
+                <div class="stat-label">Revenue Independence</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$2.3M</div>
+                <div class="stat-label">Community Earnings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">Zero</div>
+                <div class="stat-label">Corporate Bullshit</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

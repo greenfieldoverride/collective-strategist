@@ -1,0 +1,132 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - heading "The Collective Strategist" [level=1] [ref=e6]
+      - button "💼 Test Venture Professional Professional ▼" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: 💼
+          - generic [ref=e13]:
+            - generic [ref=e14]: Test Venture
+            - generic [ref=e15]: Professional
+          - generic [ref=e16]: Professional
+        - generic [ref=e17]: ▼
+      - generic [ref=e18]:
+        - generic [ref=e19]: Welcome back, Demo User! 👋
+        - button "DU" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: DU
+  - generic [ref=e23]:
+    - navigation [ref=e25]:
+      - button "Overview" [ref=e26] [cursor=pointer]:
+        - img [ref=e28]
+        - generic [ref=e32]: Overview
+      - button "Impact Dashboard" [ref=e33] [cursor=pointer]:
+        - img [ref=e35]
+        - generic [ref=e37]: Impact Dashboard
+      - button "AI Consultant" [ref=e38] [cursor=pointer]:
+        - img [ref=e40]
+        - generic [ref=e42]: AI Consultant
+      - button "Integration Hub" [ref=e43] [cursor=pointer]:
+        - img [ref=e45]
+        - generic [ref=e48]: Integration Hub
+      - button "Team" [ref=e49] [cursor=pointer]:
+        - img [ref=e51]
+        - generic [ref=e56]: Team
+      - button "Billing" [ref=e57] [cursor=pointer]:
+        - img [ref=e59]
+        - generic [ref=e63]: Billing
+      - button "Content Studio" [ref=e64] [cursor=pointer]:
+        - img [ref=e66]
+        - generic [ref=e69]: Content Studio
+      - button "Social Media" [ref=e70] [cursor=pointer]:
+        - img [ref=e72]
+        - generic [ref=e74]: Social Media
+      - button "Calendar Hub" [ref=e75] [cursor=pointer]:
+        - img [ref=e77]
+        - generic [ref=e79]: Calendar Hub
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - heading "Integration Hub" [level=2] [ref=e83]
+        - paragraph [ref=e84]: Financial Liberation Tools for Test Venture
+      - generic [ref=e85]:
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - heading "Payment Integration Hub" [level=1] [ref=e88]
+            - paragraph [ref=e89]: Connect your payment platforms to automatically track your liberation work finances
+            - button "🎯 Start Integration Tour" [ref=e90]
+          - button "🔄 Sync All Platforms" [ref=e91]
+        - generic [ref=e93]:
+          - generic [ref=e94]: 🌱
+          - generic [ref=e95]:
+            - heading "Financial Liberation Tools" [level=3] [ref=e96]
+            - paragraph [ref=e97]: These integrations help you track income across platforms, understand platform dependency risks, and maintain financial sovereignty for your liberation work.
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - generic [ref=e100]: "1"
+            - generic [ref=e101]: Connected Platforms
+          - generic [ref=e102]:
+            - generic [ref=e103]: "1"
+            - generic [ref=e104]: Active Syncing
+          - generic [ref=e105]:
+            - generic [ref=e106]: "1"
+            - generic [ref=e107]: Recently Synced
+          - generic [ref=e108]:
+            - generic [ref=e109]: "0"
+            - generic [ref=e110]: Real-time Updates
+        - generic [ref=e111]:
+          - heading "Connected Platforms" [level=2] [ref=e112]
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - generic [ref=e116]:
+                - generic [ref=e117]: 💳
+                - generic [ref=e118]:
+                  - heading "Stripe" [level=3] [ref=e119]
+                  - paragraph [ref=e120]: Online payments and subscriptions
+              - generic [ref=e122]: Active
+            - generic [ref=e123]:
+              - generic [ref=e124]: "Last sync: Just now"
+              - generic [ref=e125]:
+                - button "Sync Now" [ref=e126]
+                - button "Disconnect" [ref=e127]
+        - generic [ref=e128]:
+          - heading "Connect New Platforms" [level=2] [ref=e129]
+          - generic [ref=e131] [cursor=pointer]:
+            - generic [ref=e132]:
+              - generic [ref=e133]: 🅿️
+              - generic [ref=e134]:
+                - heading "PayPal" [level=3] [ref=e135]
+                - paragraph [ref=e136]: OAuth / API Credentials
+            - paragraph [ref=e137]: Sync PayPal payments, payouts, and account transactions
+            - generic [ref=e139]:
+              - generic [ref=e140]: Payments
+              - generic [ref=e141]: Payouts
+              - generic [ref=e142]: Refunds
+              - generic [ref=e143]: Fees tracking
+            - button "Connect PayPal" [ref=e144]
+            - generic [ref=e145]: Liberation-friendly • Secure encryption • Read-only access
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - generic [ref=e150]: 🅿️
+              - heading "Connect PayPal" [level=2] [ref=e151]
+            - button "✕" [ref=e152]
+          - paragraph [ref=e154]: 🔒 Your credentials are encrypted and stored securely. We only request read-only access to transaction data.
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - generic [ref=e157]: Environment
+              - combobox [ref=e158]:
+                - option "Sandbox (Test) - Recommended for setup" [selected]
+                - option "Production (Live) - Use after testing"
+            - generic [ref=e159]:
+              - generic [ref=e160]: Client ID *
+              - textbox "Your PayPal Client ID" [ref=e161]: test-client-id
+            - generic [ref=e162]:
+              - generic [ref=e163]: Client Secret *
+              - textbox "Your PayPal Client Secret" [active] [ref=e164]: test-client-secret
+            - button "▶ Advanced Settings" [ref=e166]
+          - generic [ref=e167]:
+            - button "Cancel" [ref=e168]
+            - button "Connect Securely" [ref=e169]
+```

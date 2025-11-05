@@ -1,0 +1,50 @@
+{
+  "name": "the-collective-strategist",
+  "version": "1.0.0",
+  "description": "AI-powered content creation and social media management platform for sovereign professionals",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "shared/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "npm run dev --workspace=@collective-strategist/api",
+    "dev:web": "npm run dev --workspace=@collective-strategist/web",
+    "build": "npm run build --workspaces",
+    "build:api": "npm run build --workspace=@collective-strategist/api",
+    "build:web": "npm run build --workspace=@collective-strategist/web",
+    "test": "npm run test --workspaces",
+    "test:e2e": "npm run test:e2e --workspace=@collective-strategist/web",
+    "lint": "npm run lint --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "clean": "npm run clean --workspaces && rm -rf node_modules",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:secure-env": "./scripts/generate-secure-env.sh",
+    "deploy:infrastructure": "docker-compose --env-file .env.production -f docker-compose.shared-infrastructure.yml up -d",
+    "deploy:apps": "docker-compose --env-file .env.production -f docker-compose.collective-strategist.yml up -d",
+    "setup": "./scripts/setup-with-existing.sh",
+    "deploy:simple": "docker-compose --env-file .env.server -f docker-compose.simple-integration.yml up -d",
+    "setup:database": "./scripts/setup-database.sh",
+    "deploy:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "deploy:prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "db:migrate": "npm run db:migrate --workspace=@collective-strategist/api",
+    "db:seed": "npm run db:seed --workspace=@collective-strategist/api"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "concurrently": "^8.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

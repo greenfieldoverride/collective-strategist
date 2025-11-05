@@ -1,0 +1,19 @@
+{
+  "name": "@collective-strategist/events",
+  "version": "0.1.0",
+  "description": "Shared event schemas and types for The Collective Strategist",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "zod": "^3.22.0",
+    "ulid": "^2.3.0",
+    "redis": "^4.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

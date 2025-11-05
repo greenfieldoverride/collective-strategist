@@ -1,0 +1,101 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - heading "The Collective Strategist" [level=1] [ref=e6]
+      - button "🤝 Liberation Tech Collective Sovereign Circle Professional ▼" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: 🤝
+          - generic [ref=e13]:
+            - generic [ref=e14]: Liberation Tech Collective
+            - generic [ref=e15]: Sovereign Circle
+          - generic [ref=e16]: Professional
+        - generic [ref=e17]: ▼
+      - generic [ref=e18]:
+        - generic [ref=e19]: Welcome back, Test User! 👋
+        - button "TU" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: TU
+  - generic [ref=e23]:
+    - navigation [ref=e25]:
+      - button "Overview" [ref=e26] [cursor=pointer]:
+        - img [ref=e28]
+        - generic [ref=e32]: Overview
+      - button "Impact Dashboard" [ref=e33] [cursor=pointer]:
+        - img [ref=e35]
+        - generic [ref=e37]: Impact Dashboard
+      - button "AI Consultant" [ref=e38] [cursor=pointer]:
+        - img [ref=e40]
+        - generic [ref=e42]: AI Consultant
+      - button "Integration Hub" [ref=e43] [cursor=pointer]:
+        - img [ref=e45]
+        - generic [ref=e48]: Integration Hub
+      - button "Team" [ref=e49] [cursor=pointer]:
+        - img [ref=e51]
+        - generic [ref=e56]: Team
+      - button "Billing" [ref=e57] [cursor=pointer]:
+        - img [ref=e59]
+        - generic [ref=e63]: Billing
+      - button "Content Studio" [ref=e64] [cursor=pointer]:
+        - img [ref=e66]
+        - generic [ref=e69]: Content Studio
+      - button "Social Media" [ref=e70] [cursor=pointer]:
+        - img [ref=e72]
+        - generic [ref=e74]: Social Media
+      - button "Calendar Hub" [ref=e75] [cursor=pointer]:
+        - img [ref=e77]
+        - generic [ref=e79]: Calendar Hub
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - heading "AI Consultant" [level=2] [ref=e83]
+        - paragraph [ref=e84]: Strategic advice for Liberation Tech Collective
+      - generic [ref=e85]:
+        - generic [ref=e87]:
+          - text: "Session Type:"
+          - combobox "Session Type:" [ref=e88]:
+            - option "Strategic Advice" [selected]
+            - option "Goal Planning"
+            - option "Trend Analysis"
+            - option "Market Analysis"
+        - generic [ref=e90]:
+          - generic [ref=e92]:
+            - generic [ref=e93]:
+              - text: 🤖 AI Consultant03:39 PM
+              - generic [ref=e94]: "Confidence: 100%"
+            - generic [ref=e95]:
+              - paragraph [ref=e96]: "Hi there! I'm here to help you with your venture. Whether you're building a sovereign circle, running a cooperative, or growing a professional business, I can help you with:"
+              - paragraph [ref=e97]: • Strategic planning and decision-making • Understanding industry trends and opportunities • Setting and achieving your collective goals • Analyzing your competitive landscape
+              - paragraph [ref=e98]: I'll provide advice that aligns with your venture's values and objectives. What would you like to explore?
+          - generic [ref=e100]:
+            - generic [ref=e101]: 👤 You03:39 PM
+            - paragraph [ref=e103]: What are some strategic recommendations for growing our Liberation Collective venture?
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - text: 🤖 AI Consultant03:39 PM
+              - generic [ref=e107]: "Confidence: 85%"
+            - paragraph [ref=e109]: Based on your Liberation Collective venture context, I recommend focusing on community-driven growth strategies that align with your cooperative values. Consider implementing transparent decision-making processes and building strong local partnerships.
+            - generic [ref=e110]:
+              - heading "💡 Recommendations:" [level=4] [ref=e111]
+              - list [ref=e112]:
+                - listitem [ref=e113]: Focus on community-driven growth strategies
+                - listitem [ref=e114]: Implement transparent decision-making processes
+                - listitem [ref=e115]: Build strong local partnerships
+            - generic [ref=e116]:
+              - heading "🎯 Next Steps:" [level=4] [ref=e117]
+              - list [ref=e118]:
+                - listitem [ref=e119]: Review community feedback on current initiatives
+                - listitem [ref=e120]: Explore partnership opportunities with local organizations
+                - listitem [ref=e121]: Document decision-making processes for transparency
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - text: "💡 Try asking:"
+            - generic [ref=e124]:
+              - button "How do we build stronger community engagement?" [ref=e125]
+              - button "What's the best way to onboard new members?" [ref=e126]
+              - button "How can we improve our collective decision-making?" [ref=e127]
+              - button "What governance structures work best?" [ref=e128]
+          - generic [ref=e130]:
+            - textbox "Ask me anything about strategy, goals, trends, or market analysis..." [ref=e131]
+            - button "📤" [disabled] [ref=e132]
+```

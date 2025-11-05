@@ -1,0 +1,67 @@
+# The Collective Strategist - Application Services
+# This connects to shared infrastructure (postgres, redis, etc.)
+# Run shared infrastructure first: docker-compose -f docker-compose.shared-infrastructure.yml up -d
+
+version: '3.8'
+
+services:
+  # ======================
+  # THE COLLECTIVE STRATEGIST APPLICATIONS
+  # ======================
+
+  # Frontend - React Application with Nginx
+  frontend:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - core-api
+    networks:
+      - liberation-shared-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.strategist-frontend.rule=Host(`strategist.greenfieldoverride.com`)"
+      - "traefik.http.routers.strategist-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.strategist-frontend.loadbalancer.server.port=80"
+
+  # Backend API - Node.js/Fastify
+  core-api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    environment:
+      - NODE_ENV=production
+      - PORT=${API_PORT}
+      - DATABASE_URL=postgres://shared_user:${POSTGRES_PASSWORD}@postgres:5432/collective_strategist
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/1
+      - JWT_SECRET=${JWT_SECRET}
+      - RATE_LIMIT_ENABLED=true
+      - CORS_ORIGIN=https://strategist.greenfieldoverride.com,http://localhost:3000
+      - LOG_LEVEL=info
+    # Dependencies are external services from shared infrastructure
+    # postgres and redis containers must be running
+    networks:
+      - liberation-shared-network
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.strategist-api.rule=Host(`api.greenfieldoverride.com`)"
+      - "traefik.http.routers.strategist-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.strategist-api.loadbalancer.server.port=${API_PORT}"
+      - "prometheus.scrape=true"
+      - "prometheus.port=${API_PORT}"
+      - "prometheus.path=/metrics"
+
+# Use external network created by shared infrastructure
+networks:
+  liberation-shared-network:
+    external: true

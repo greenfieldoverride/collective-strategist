@@ -1,0 +1,51 @@
+# The Collective Strategist - Simple Integration with Existing Liberation Infrastructure
+# This uses the existing postgres, redis, and network from liberation platform
+
+version: '3.8'
+
+services:
+  # Frontend - React Application with Nginx
+  collective-strategist-frontend:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "8090:80"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=https://strategist.greenfieldoverride.com/api
+    depends_on:
+      - collective-strategist-api
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    container_name: collective-strategist-frontend
+
+  # Backend API - Node.js/Fastify
+  collective-strategist-api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    # No external port - accessed via frontend nginx proxy
+    environment:
+      - NODE_ENV=production
+      - PORT=8007
+      # Use separate postgres user and database for security isolation
+      - DATABASE_URL=postgres://collective_strategist:${POSTGRES_PASSWORD}@liberation-postgres:5432/collective_strategist
+      # Use existing liberation redis with different DB number
+      - REDIS_URL=redis://liberation-redis:6379/1
+      - JWT_SECRET=${JWT_SECRET}
+      - RATE_LIMIT_ENABLED=true
+      - CORS_ORIGIN=https://strategist.greenfieldoverride.com,http://localhost:8090
+      - LOG_LEVEL=info
+    networks:
+      - liberation-network
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
+    container_name: collective-strategist-api
+
+# Use existing external network
+networks:
+  liberation-network:
+    external: true

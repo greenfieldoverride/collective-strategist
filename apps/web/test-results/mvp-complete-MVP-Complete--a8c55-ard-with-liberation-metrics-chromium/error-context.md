@@ -1,0 +1,95 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - heading "The Collective Strategist" [level=1] [ref=e6]
+      - button "🤝 Liberation Tech Collective Sovereign Circle Professional ▼" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: 🤝
+          - generic [ref=e13]:
+            - generic [ref=e14]: Liberation Tech Collective
+            - generic [ref=e15]: Sovereign Circle
+          - generic [ref=e16]: Professional
+        - generic [ref=e17]: ▼
+      - generic [ref=e18]:
+        - generic [ref=e19]: Welcome back, Test User! 👋
+        - button "TU" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: TU
+  - generic [ref=e23]:
+    - navigation [ref=e25]:
+      - button "Overview" [ref=e26] [cursor=pointer]:
+        - img [ref=e28]
+        - generic [ref=e32]: Overview
+      - button "Impact Dashboard" [active] [ref=e33] [cursor=pointer]:
+        - img [ref=e35]
+        - generic [ref=e37]: Impact Dashboard
+      - button "AI Consultant" [ref=e38] [cursor=pointer]:
+        - img [ref=e40]
+        - generic [ref=e42]: AI Consultant
+      - button "Integration Hub" [ref=e43] [cursor=pointer]:
+        - img [ref=e45]
+        - generic [ref=e48]: Integration Hub
+      - button "Team" [ref=e49] [cursor=pointer]:
+        - img [ref=e51]
+        - generic [ref=e56]: Team
+      - button "Billing" [ref=e57] [cursor=pointer]:
+        - img [ref=e59]
+        - generic [ref=e63]: Billing
+      - button "Content Studio" [ref=e64] [cursor=pointer]:
+        - img [ref=e66]
+        - generic [ref=e69]: Content Studio
+      - button "Social Media" [ref=e70] [cursor=pointer]:
+        - img [ref=e72]
+        - generic [ref=e74]: Social Media
+      - button "Calendar Hub" [ref=e75] [cursor=pointer]:
+        - img [ref=e77]
+        - generic [ref=e79]: Calendar Hub
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - heading "Impact Dashboard" [level=2] [ref=e83]
+        - paragraph [ref=e84]: Measure what truly matters for liberation and community building
+      - generic [ref=e85]:
+        - generic [ref=e86]: ⚠️ Failed to load impact data
+        - button "×" [ref=e87] [cursor=pointer]
+      - generic [ref=e88]:
+        - button "🌿 Community Resilience 0 metrics" [ref=e89] [cursor=pointer]:
+          - generic [ref=e90]: 🌿
+          - generic [ref=e91]:
+            - generic [ref=e92]: Community Resilience
+            - generic [ref=e93]: 0 metrics
+        - button "🧠 Knowledge Liberation 0 metrics" [ref=e94] [cursor=pointer]:
+          - generic [ref=e95]: 🧠
+          - generic [ref=e96]:
+            - generic [ref=e97]: Knowledge Liberation
+            - generic [ref=e98]: 0 metrics
+        - button "🎨 Cultural Impact 0 metrics" [ref=e99] [cursor=pointer]:
+          - generic [ref=e100]: 🎨
+          - generic [ref=e101]:
+            - generic [ref=e102]: Cultural Impact
+            - generic [ref=e103]: 0 metrics
+        - button "🚀 Movement Growth 0 metrics" [ref=e104] [cursor=pointer]:
+          - generic [ref=e105]: 🚀
+          - generic [ref=e106]:
+            - generic [ref=e107]: Movement Growth
+            - generic [ref=e108]: 0 metrics
+        - button "✊ Personal Sovereignty 0 metrics" [ref=e109] [cursor=pointer]:
+          - generic [ref=e110]: ✊
+          - generic [ref=e111]:
+            - generic [ref=e112]: Personal Sovereignty
+            - generic [ref=e113]: 0 metrics
+      - generic [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]: 🌿
+            - generic [ref=e118]:
+              - heading "Community Resilience" [level=3] [ref=e119]
+              - paragraph [ref=e120]: Building strong, interdependent communities that support each other
+          - button "Connect Platform" [ref=e121] [cursor=pointer]
+        - generic [ref=e124]:
+          - generic [ref=e125]: 📊
+          - heading "No Connected Platforms" [level=4] [ref=e126]
+          - paragraph [ref=e127]: Connect platforms to start tracking your community resilience impact.
+          - heading "Suggested for this module:" [level=5] [ref=e129]
+```
