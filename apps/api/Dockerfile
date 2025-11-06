@@ -2,9 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files for dependency installation
 COPY package*.json ./
-COPY services/core-api/package*.json ./services/core-api/
+COPY apps/api/package*.json ./apps/api/
 COPY shared/types/package*.json ./shared/types/
 
 # Install dependencies
@@ -12,15 +12,16 @@ RUN npm ci --only=production
 
 # Copy source code
 COPY shared/ ./shared/
-COPY services/core-api/ ./services/core-api/
+COPY apps/api/ ./apps/api/
 
-# Build the application
+# Build shared types first
 WORKDIR /app/shared/types
 RUN npm run build
 
-WORKDIR /app/services/core-api
+# Build the API application
+WORKDIR /app/apps/api
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 8007
 
 CMD ["npm", "start"]

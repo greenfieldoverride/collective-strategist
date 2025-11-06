@@ -5,10 +5,10 @@ version: '3.8'
 
 services:
   # Frontend - React Application with Nginx
-  collective-strategist-frontend:
+  frontend:
     build:
-      context: ./apps/web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/web/Dockerfile
     ports:
       - "8090:80"
     environment:
@@ -24,8 +24,8 @@ services:
   # Backend API - Node.js/Fastify
   collective-strategist-api:
     build:
-      context: ./apps/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/api/Dockerfile
     # No external port - accessed via frontend nginx proxy
     environment:
       - NODE_ENV=production
