@@ -60,3 +60,6 @@ services/liberation-guardian/
 # If shared packages become independent, add them here
 # shared/events/ (if moved to separate repo)
 # shared/types/ (if moved to separate repo)
+
+# Server environment file with real credentials
+.env.server

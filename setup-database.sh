@@ -5,6 +5,9 @@
 
 set -e
 
+# Change to script directory to ensure relative paths work
+cd "$(dirname "$0")"
+
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -67,7 +70,9 @@ echo "Password: $DB_PASSWORD"
 echo "Database: collective_strategist"
 echo "Host: liberation-postgres (internal Docker network)"
 echo ""
-echo -e "${YELLOW}🔐 Update your .env.server file with:${NC}"
-echo "POSTGRES_PASSWORD=$DB_PASSWORD"
+echo -e "${YELLOW}🔐 Create and update your .env.server file:${NC}"
+echo "1. Copy template: cp .env.server.example .env.server"
+echo "2. Edit: nano .env.server"
+echo "3. Set: POSTGRES_PASSWORD=$DB_PASSWORD"
 echo ""
 echo -e "${BLUE}💾 Save these credentials securely!${NC}"

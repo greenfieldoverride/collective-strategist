@@ -5,6 +5,9 @@
 
 set -e
 
+# Change to script directory to ensure relative paths work
+cd "$(dirname "$0")"
+
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -17,7 +20,9 @@ echo -e "${BLUE}🚀 Deploying The Collective Strategist...${NC}"
 # Check if .env.server exists
 if [[ ! -f ".env.server" ]]; then
     echo -e "${RED}❌ .env.server file not found${NC}"
-    echo -e "${YELLOW}Please create .env.server with your database credentials.${NC}"
+    echo -e "${YELLOW}Please create .env.server from the example template:${NC}"
+    echo "cp .env.server.example .env.server"
+    echo "Then edit .env.server with your actual values."
     echo "Run ./setup-database.sh first to generate the database password."
     exit 1
 fi
