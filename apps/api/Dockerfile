@@ -7,19 +7,23 @@ COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
 COPY shared/types/package*.json ./shared/types/
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY shared/ ./shared/
 COPY apps/api/ ./apps/api/
 
-# Build shared types first
+# Install dependencies for shared types package
 WORKDIR /app/shared/types
+RUN npm ci
+
+# Build shared types first
 RUN npm run build
 
 # Build the API application
 WORKDIR /app/apps/api
+RUN npm ci
 RUN npm run build
 
 EXPOSE 8007
