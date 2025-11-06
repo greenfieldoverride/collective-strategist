@@ -21,11 +21,11 @@ RUN npm ci
 # Build shared types first
 RUN npm run build
 
-# Install API dependencies (skip build step)
+# Install API dependencies and build for production
 WORKDIR /app/apps/api
 RUN npm ci
+RUN npm run build
 
 EXPOSE 8007
 
-# Run TypeScript directly with tsx instead of compiling
-CMD ["npx", "tsx", "src/index.ts"]
+CMD ["npm", "start"]

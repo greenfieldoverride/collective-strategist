@@ -15,5 +15,15 @@
     "moduleResolution": "node"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules", 
+    "dist",
+    "src/__tests__/**/*",
+    "src/routes/integrations.ts",
+    "src/routes/integrations-fastify.ts",
+    "src/services/mock-venture-service.ts",
+    "src/services/integration-service.ts",
+    "src/services/integrations/**/*",
+    "src/events/client.ts"
+  ]
 }

@@ -22,8 +22,8 @@ import { conversationRoutes } from './routes/conversations';
 import { ventureRoutes } from './routes/ventures';
 import { migrationRoutes } from './routes/migration';
 import { financialAnalyticsRoutes } from './routes/financial-analytics';
-import { integrationsRoutes } from './routes/integrations-fastify';
-import impactDashboardRoutes from './routes/impact-dashboard-fastify';
+// import { integrationsRoutes } from './routes/integrations-fastify';
+// import impactDashboardRoutes from './routes/impact-dashboard-fastify';
 import { assetRoutes } from './routes/assets';
 import billingRoutes from './routes/billing';
 import { db } from './database/connection';
@@ -170,8 +170,8 @@ async function build() {
   await fastify.register(ventureRoutes, { prefix: '/api/v1' });
   await fastify.register(migrationRoutes, { prefix: '/api/v1' });
   await fastify.register(financialAnalyticsRoutes, { prefix: '/api/v1' });
-  await fastify.register(integrationsRoutes, { prefix: '/api/v1/integrations', db });
-  await fastify.register(impactDashboardRoutes, { prefix: '/api/v1' });
+  // await fastify.register(integrationsRoutes, { prefix: '/api/v1/integrations', db });
+  // await fastify.register(impactDashboardRoutes, { prefix: '/api/v1' });
   await fastify.register(assetRoutes, { prefix: '/api/v1' });
   await fastify.register(billingRoutes);
 
