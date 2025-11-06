@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { AIGenerationOptions } from '../../../shared/types/src/index';
+import { AIGenerationOptions } from '@collective-strategist/types';
 
 export interface AIRequest {
   user_id: string;

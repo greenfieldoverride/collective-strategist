@@ -110,7 +110,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
       }
 
       const userId = (request as any).user?.id;
-      const venture = await ventureService.createVenture(userId, validation.data);
+      const venture = await ventureService.createVenture(userId, validation.data as CreateVentureRequest);
 
       const response: StrategistResponse<typeof venture> = {
         success: true,
@@ -507,7 +507,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
       const { ventureId } = request.params;
       const userId = (request as any).user?.id;
       
-      const invitation = await ventureService.inviteMember(userId, ventureId, validation.data);
+      const invitation = await ventureService.inviteMember(userId, ventureId, validation.data as InviteMemberRequest);
 
       const response: StrategistResponse<typeof invitation> = {
         success: true,
@@ -611,13 +611,14 @@ export async function ventureRoutes(fastify: FastifyInstance) {
         });
       }
 
-      // Cache the venture for 15 minutes
-      await cacheService.set(cacheKey, venture, CacheService.TTL.FIFTEEN_MINUTES);
-      console.log('Cached venture:', ventureId);
+      // Clear cache for deleted venture
+      const cacheKey = CacheService.generateKey(CacheKeys.VENTURE, ventureId);
+      await cacheService.del(cacheKey);
+      console.log('Cleared cache for deleted venture:', ventureId);
 
-      const response: StrategistResponse<typeof venture> = {
+      const response: StrategistResponse<boolean> = {
         success: true,
-        data: venture,
+        data: deleted,
         meta: {
           timestamp: new Date().toISOString(),
           processingTime: Date.now() - startTime
