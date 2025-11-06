@@ -65,13 +65,13 @@ DOMAIN=greenfieldoverride.com
 APP_DOMAIN=strategist.greenfieldoverride.com
 
 # SSL/TLS Configuration  
-ACME_EMAIL=admin@greenfieldoverride.com
+ACME_EMAIL=CHANGE_ME_TO_YOUR_ADMIN_EMAIL
 
 # Security Notes:
 # - All passwords are 25 characters, base64-encoded, no special chars for compatibility
 # - JWT secret is 32 bytes base64-encoded
 # - Change CORS_ORIGIN and domains for your actual deployment
-# - Update ACME_EMAIL for Let's Encrypt certificates
+# - Update ACME_EMAIL to your actual admin email address
 EOF
 
 # Set secure permissions
@@ -82,7 +82,7 @@ echo -e "${GREEN}✅ File permissions set to 600 (owner read/write only)${NC}"
 echo ""
 echo -e "${YELLOW}📝 Next steps:${NC}"
 echo "1. Review and update domains in $ENV_FILE"
-echo "2. Update ACME_EMAIL for SSL certificates"  
+echo "2. Update ACME_EMAIL to your actual admin email address"  
 echo "3. Run deployment: npm run deploy"
 echo ""
 echo -e "${YELLOW}🔒 Security reminders:${NC}"

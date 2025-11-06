@@ -22,13 +22,14 @@ if [[ ! -f ".env.server" ]]; then
     exit 1
 fi
 
-# Check for placeholder passwords
-if grep -q "CHANGE_ME_AFTER_RUNNING_DATABASE_SETUP" .env.server; then
+# Check for placeholder values
+if grep -q "CHANGE_ME" .env.server; then
     echo -e "${RED}❌ .env.server contains placeholder values${NC}"
     echo -e "${YELLOW}Please update .env.server with real values:${NC}"
     echo "1. Run ./setup-database.sh to generate PostgreSQL password"
     echo "2. Generate JWT_SECRET with: openssl rand -base64 32"
-    echo "3. Update .env.server with the real values"
+    echo "3. Update ACME_EMAIL to your actual admin email address"
+    echo "4. Update .env.server with the real values"
     exit 1
 fi
 
