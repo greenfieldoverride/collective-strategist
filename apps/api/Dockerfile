@@ -6,6 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
 COPY shared/types/package*.json ./shared/types/
+COPY shared/events/package*.json ./shared/events/
 
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
@@ -14,11 +15,13 @@ RUN npm ci
 COPY shared/ ./shared/
 COPY apps/api/ ./apps/api/
 
-# Install dependencies for shared types package
+# Install and build shared packages first
 WORKDIR /app/shared/types
 RUN npm ci
+RUN npm run build
 
-# Build shared types first
+WORKDIR /app/shared/events
+RUN npm ci
 RUN npm run build
 
 # Install API dependencies and build for production
