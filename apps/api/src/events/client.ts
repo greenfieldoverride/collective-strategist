@@ -1,4 +1,4 @@
-import { EventClient, EventClientConfig } from '../../../shared/events/dist/client';
+import { EventClient, EventClientConfig } from '@collective-strategist/events';
 
 const eventClientConfig: EventClientConfig = {
   redis: {

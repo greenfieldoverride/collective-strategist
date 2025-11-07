@@ -52,9 +52,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Create a new conversation
   fastify.post('/conversations', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Create a new conversation',
       tags: ['Conversations'],
       security: [{ Bearer: [] }],
       body: {
@@ -70,7 +69,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
           tags: { type: 'array', items: { type: 'string' } }
         }
       }
-    }
+    } as any
   }, async (request: FastifyRequest<{ Body: CreateConversationRequest }>, reply: FastifyReply) => {
     const startTime = Date.now();
     
@@ -88,7 +87,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
       }
 
       const userId = (request as any).user?.id;
-      const conversation = await conversationService.createConversation(userId, validation.data);
+      const conversation = await conversationService.createConversation(userId, validation.data as CreateConversationRequest);
 
       const response: StrategistResponse<typeof conversation> = {
         success: true,
@@ -101,7 +100,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.status(201).send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -114,9 +113,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Get conversations for the authenticated user
   fastify.get('/conversations', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get user conversations with filtering and pagination',
       tags: ['Conversations'],
       security: [{ Bearer: [] }],
       querystring: {
@@ -170,7 +168,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -183,9 +181,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Get a specific conversation
   fastify.get('/conversations/:conversationId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get a specific conversation with messages',
       tags: ['Conversations'],
       security: [{ Bearer: [] }],
       params: {
@@ -226,7 +223,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -239,9 +236,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Update a conversation
   fastify.patch('/conversations/:conversationId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Update a conversation',
       tags: ['Conversations'],
       security: [{ Bearer: [] }],
       params: {
@@ -305,7 +301,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -318,9 +314,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Add a message to a conversation
   fastify.post('/conversations/messages', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Add a message to a conversation',
       tags: ['Conversations'],
       security: [{ Bearer: [] }],
       body: {
@@ -362,7 +357,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
       }
 
       const userId = (request as any).user?.id;
-      const message = await conversationService.addMessage(userId, validation.data);
+      const message = await conversationService.addMessage(userId, validation.data as SendMessageRequest);
 
       const response: StrategistResponse<typeof message> = {
         success: true,
@@ -375,7 +370,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.status(201).send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -388,9 +383,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Delete a conversation
   fastify.delete('/conversations/:conversationId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Delete a conversation (soft delete)',
       tags: ['Conversations'],
       security: [{ Bearer: [] }],
       params: {
@@ -431,7 +425,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -444,9 +438,8 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
   // Get conversation statistics
   fastify.get('/conversations/stats', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get conversation statistics for the authenticated user',
       tags: ['Conversations'],
       security: [{ Bearer: [] }]
     }
@@ -468,7 +461,7 @@ export async function conversationRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {

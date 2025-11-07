@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import { VentureService } from '../services/venture-service';
-import { MockVentureService } from '../services/mock-venture-service';
+// import { MockVentureService } from '../services/mock-venture-service';
 import { 
   CreateVentureRequest,
   UpdateVentureRequest,
@@ -18,7 +18,6 @@ import { cacheService, CacheService, CacheKeys } from '../services/cache-service
 // Validation schemas
 const createVentureSchema = z.object({
   name: z.string().min(1).max(255),
-  description: z.string().max(1000).optional(),
   ventureType: z.enum(['sovereign_circle', 'professional', 'cooperative', 'solo']),
   isGreenfieldAffiliate: z.boolean().optional(),
   sovereignCircleId: z.string().optional(),
@@ -32,7 +31,6 @@ const createVentureSchema = z.object({
 
 const updateVentureSchema = z.object({
   name: z.string().min(1).max(255).optional(),
-  description: z.string().max(1000).optional(),
   coreValues: z.array(z.string()).optional(),
   primaryGoals: z.array(z.string()).optional(),
   ventureVoice: z.string().optional(),
@@ -67,9 +65,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Create a new venture
   fastify.post('/ventures', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Create a new venture',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       body: {
@@ -77,7 +74,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
         required: ['name', 'ventureType'],
         properties: {
           name: { type: 'string', minLength: 1, maxLength: 255 },
-          description: { type: 'string', maxLength: 1000 },
           ventureType: { 
             type: 'string', 
             enum: ['sovereign_circle', 'professional', 'cooperative', 'solo'] 
@@ -123,7 +119,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.status(201).send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -136,9 +132,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Get ventures for the authenticated user
   fastify.get('/ventures', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get user ventures with filtering and pagination',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       querystring: {
@@ -201,7 +196,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
         {
           id: '550e8400-e29b-41d4-a716-446655440000',
           name: 'Liberation Collective',
-          description: 'A cooperative focused on building liberation technologies and supporting community sovereignty',
           ventureType: 'cooperative',
           primaryBillingOwner: userId,
           billingTier: 'liberation',
@@ -232,7 +226,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
         {
           id: '550e8400-e29b-41d4-a716-446655440001',
           name: 'Creative Commons Studio',
-          description: 'Independent creative studio producing liberation-themed art, music, and media',
           ventureType: 'professional',
           primaryBillingOwner: userId,
           billingTier: 'professional',
@@ -284,7 +277,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -297,9 +290,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Get a specific venture
   fastify.get('/ventures/:ventureId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get a specific venture with full details',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       params: {
@@ -356,7 +348,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -369,9 +361,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Update a venture
   fastify.patch('/ventures/:ventureId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Update a venture',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       params: {
@@ -385,7 +376,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           name: { type: 'string', minLength: 1, maxLength: 255 },
-          description: { type: 'string', maxLength: 1000 },
           coreValues: { type: 'array', items: { type: 'string' } },
           primaryGoals: { type: 'array', items: { type: 'string' } },
           ventureVoice: { type: 'string' },
@@ -442,7 +432,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -455,9 +445,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Invite a member to a venture
   fastify.post('/ventures/:ventureId/members/invite', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Invite a member to join a venture',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       params: {
@@ -520,7 +509,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.status(201).send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -533,9 +522,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Get venture statistics
   fastify.get('/ventures/:ventureId/stats', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get venture statistics and analytics',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       params: {
@@ -566,7 +554,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -579,9 +567,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
   // Delete/archive a venture
   fastify.delete('/ventures/:ventureId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Archive a venture (soft delete)',
       tags: ['Ventures'],
       security: [{ Bearer: [] }],
       params: {
@@ -627,7 +614,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -641,7 +628,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
   // Development/Demo route - mock ventures (no auth required)
   fastify.get('/ventures/demo', {
     schema: {
-      description: 'Get demo ventures for development/testing (no auth required)',
       tags: ['Ventures'],
       response: {
         200: {
@@ -658,7 +644,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
                     properties: {
                       id: { type: 'string' },
                       name: { type: 'string' },
-                      description: { type: 'string' },
                       ventureType: { type: 'string' },
                       status: { type: 'string' }
                     }
@@ -676,7 +661,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
       {
         id: 'demo-venture-1',
         name: 'Liberation Tech Collective',
-        description: 'Building open-source tools for financial independence and community sovereignty',
         ventureType: 'sovereign_circle',
         status: 'active',
         isGreenfieldAffiliate: true,
@@ -689,7 +673,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
       {
         id: 'demo-venture-2', 
         name: 'Creative Independence Hub',
-        description: 'Supporting artists and creators in building sustainable, independent income streams',
         ventureType: 'cooperative',
         status: 'active',
         isGreenfieldAffiliate: false,
@@ -702,7 +685,6 @@ export async function ventureRoutes(fastify: FastifyInstance) {
       {
         id: 'demo-venture-3',
         name: 'Solo Consultant Practice',
-        description: 'Strategic business consulting focused on sustainable growth and ethical practices',
         ventureType: 'solo',
         status: 'active', 
         isGreenfieldAffiliate: false,

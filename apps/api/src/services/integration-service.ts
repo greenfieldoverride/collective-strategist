@@ -182,7 +182,7 @@ export class IntegrationService {
     }
 
     // Decrypt credentials
-    const credentials = await this.decryptCredentials(config.credentials)
+    const credentials = await this.decryptCredentials(config.credentials as any)
     
     // Authenticate
     const isValid = await integration.authenticate(credentials)

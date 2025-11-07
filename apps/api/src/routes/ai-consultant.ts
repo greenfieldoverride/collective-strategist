@@ -37,9 +37,8 @@ export async function aiConsultantRoutes(fastify: FastifyInstance) {
   const conversationService = new ConversationService(db);
   // AI Business Consultant - Interactive strategic advice
   fastify.post('/ai-consultant/ask', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get strategic business advice from AI consultant',
       tags: ['AI Consultant'],
         body: {
           type: 'object',
@@ -311,7 +310,7 @@ Start your response directly with advice - no preamble like "Perfect!" or "You a
       const aiResponse: AIConsultantResponse = {
         response: aiResult.text,
         confidenceScore: 0.85, // TODO: Extract from AI response or calculate based on factors
-        marketDataUsed: includeMarketData ? marketData : [],
+        marketDataUsed: includeMarketData ? marketData as any : [],
         recommendations: recommendations.length > 0 ? recommendations : [
           'Based on the analysis, consider implementing the suggested strategies',
           'Monitor key performance indicators regularly',
@@ -355,7 +354,7 @@ Start your response directly with advice - no preamble like "Perfect!" or "You a
           });
         } catch (historyError) {
           // Log error but don't fail the request
-          fastify.log.warn('Failed to save conversation history:', historyError);
+          console.warn('Failed to save conversation history:', historyError);
         }
       }
 
@@ -392,7 +391,7 @@ Start your response directly with advice - no preamble like "Perfect!" or "You a
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -405,9 +404,8 @@ Start your response directly with advice - no preamble like "Perfect!" or "You a
 
   // Market Analysis - Analyze trends and opportunities
   fastify.post('/ai-consultant/market-analysis', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get market analysis and trend insights',
       tags: ['AI Consultant'],
       body: {
         type: 'object',
@@ -525,7 +523,6 @@ Value proposition: Strategic business consulting for growth and optimization`;
       insights.push({
         type: 'opportunity',
         title: 'AI-Identified Market Opportunity',
-        description: aiResult.text.substring(0, 200) + '...',
         confidence: 0.85,
         impact: 'high',
         timeframe: 'short_term',
@@ -568,7 +565,7 @@ Value proposition: Strategic business consulting for growth and optimization`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -581,9 +578,8 @@ Value proposition: Strategic business consulting for growth and optimization`;
 
   // Get consultation history for a contextual core
   fastify.get('/ai-consultant/sessions/:contextualCoreId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get consultation history for a contextual core',
       tags: ['AI Consultant'],
       params: {
         type: 'object',
@@ -636,7 +632,7 @@ Value proposition: Strategic business consulting for growth and optimization`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -649,9 +645,8 @@ Value proposition: Strategic business consulting for growth and optimization`;
 
   // Get specific consultation session
   fastify.get('/ai-consultant/sessions/:contextualCoreId/:sessionId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get a specific consultation session',
       tags: ['AI Consultant'],
       params: {
         type: 'object',
@@ -694,7 +689,7 @@ Value proposition: Strategic business consulting for growth and optimization`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {

@@ -1,8 +1,9 @@
+/// <reference path="../types/fastify.d.ts" />
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import { Pool } from 'pg';
 import { User, StrategistResponse } from '../types/collective-strategist';
-import { UserService } from '../services/user-service';
+import { UserService, CreateUserRequest, ChangePasswordRequest } from '../services/user-service';
 
 // Create pool directly with correct environment variables
 let userService: UserService;
@@ -129,7 +130,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      const result = await userService.createUser(validation.data);
+      const result = await userService.createUser(validation.data as CreateUserRequest);
       
       if (!result.data) {
         throw new Error('User creation failed');
@@ -152,7 +153,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         meta: result.meta
       });
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -252,7 +253,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -333,7 +334,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -421,7 +422,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -523,7 +524,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -643,7 +644,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -713,7 +714,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      const result = await userService.changePassword(userId, validation.data);
+      const result = await userService.changePassword(userId, validation.data as ChangePasswordRequest);
       
       return reply.send({
         success: true,
@@ -722,7 +723,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       
       // Handle specific error types
       const errorMessage = error instanceof Error ? error.message : 'Failed to change password';
@@ -787,7 +788,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -874,7 +875,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -962,7 +963,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -1033,7 +1034,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -1080,7 +1081,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -1145,7 +1146,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {

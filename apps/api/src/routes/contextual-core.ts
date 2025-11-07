@@ -11,7 +11,6 @@ import {
 // Validation schemas
 const createCoreSchema = z.object({
   name: z.string().min(1).max(255),
-  description: z.string().optional(),
   businessType: z.string().optional(),
   targetAudience: z.string().optional(),
   brandVoice: z.string().optional(),
@@ -29,9 +28,8 @@ const uploadAssetSchema = z.object({
 export async function contextualCoreRoutes(fastify: FastifyInstance) {
   // Get all contextual cores for the authenticated user
   fastify.get('/contextual-cores', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get all contextual cores for the authenticated user',
       tags: ['Contextual Core'],
       response: {
         200: {
@@ -45,7 +43,6 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
                 properties: {
                   id: { type: 'string' },
                   name: { type: 'string' },
-                  description: { type: 'string' },
                   businessType: { type: 'string' },
                   targetAudience: { type: 'string' },
                   brandVoice: { type: 'string' },
@@ -78,7 +75,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
       
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -91,16 +88,14 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
   // Create a new contextual core
   fastify.post('/contextual-cores', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Create a new contextual core',
       tags: ['Contextual Core'],
       body: {
         type: 'object',
         required: ['name'],
         properties: {
           name: { type: 'string', minLength: 1, maxLength: 255 },
-          description: { type: 'string' },
           businessType: { type: 'string' },
           targetAudience: { type: 'string' },
           brandVoice: { type: 'string' },
@@ -142,7 +137,6 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
         id: 'uuid-placeholder', // Replace with actual UUID generation
         userId,
         name: validation.data.name,
-        description: validation.data.description,
         businessType: validation.data.businessType,
         targetAudience: validation.data.targetAudience,
         brandVoice: validation.data.brandVoice,
@@ -163,7 +157,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
       return reply.status(201).send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -176,9 +170,8 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
   // Get a specific contextual core
   fastify.get('/contextual-cores/:id', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get a specific contextual core',
       tags: ['Contextual Core'],
       params: {
         type: 'object',
@@ -218,7 +211,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -231,9 +224,8 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
   // Update a contextual core
   fastify.put('/contextual-cores/:id', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Update a contextual core',
       tags: ['Contextual Core'],
       params: {
         type: 'object',
@@ -285,7 +277,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -298,9 +290,8 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
   // Upload an asset to a contextual core
   fastify.post('/contextual-cores/:id/assets', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Upload an asset to a contextual core',
       tags: ['Contextual Core'],
       params: {
         type: 'object',
@@ -355,7 +346,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
       return reply.status(201).send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -368,9 +359,8 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
   // Get assets for a contextual core
   fastify.get('/contextual-cores/:id/assets', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get assets for a contextual core',
       tags: ['Contextual Core'],
       params: {
         type: 'object',
@@ -400,7 +390,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -413,9 +403,8 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
   // Delete a contextual core
   fastify.delete('/contextual-cores/:id', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Delete a contextual core',
       tags: ['Contextual Core'],
       params: {
         type: 'object',
@@ -445,7 +434,7 @@ export async function contextualCoreRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {

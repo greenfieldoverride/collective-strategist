@@ -447,3 +447,6 @@ export const EVENT_SCHEMAS = {
 } as const;
 
 export type EventType = keyof typeof EVENT_SCHEMAS;
+
+// Export client classes
+export { EventClient, EventClientConfig } from './client';

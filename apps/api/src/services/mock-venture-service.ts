@@ -20,7 +20,7 @@ export class MockVentureService {
   }
 
   private initializeMockData() {
-    const sampleVentures: Venture[] = [
+    const sampleVentures: any[] = [
       {
         id: 'venture-liberation-collective',
         name: 'Liberation Collective',
@@ -49,8 +49,6 @@ export class MockVentureService {
         targetAudience: 'Activists, technologists, and community organizers working toward liberation',
         costSharingEnabled: true,
         costSharingMethod: 'contribution_based',
-        monthlyBudget: 8500,
-        isActive: true,
         createdAt: new Date('2024-01-15'),
         updatedAt: new Date('2024-12-01')
       },
@@ -62,7 +60,6 @@ export class MockVentureService {
         primaryBillingOwner: 'uuid-placeholder',
         billingTier: 'professional',
         maxMembers: 12,
-        currentMembers: 5,
         isGreenfieldAffiliate: false,
         coreValues: [
           'Artistic freedom',
@@ -80,8 +77,6 @@ export class MockVentureService {
         targetAudience: 'Artists, cultural workers, and communities seeking authentic representation',
         costSharingEnabled: true,
         costSharingMethod: 'equal',
-        monthlyBudget: 4200,
-        isActive: true,
         createdAt: new Date('2024-03-10'),
         updatedAt: new Date('2024-11-28')
       },
@@ -93,7 +88,6 @@ export class MockVentureService {
         primaryBillingOwner: 'uuid-placeholder',
         billingTier: 'professional',
         maxMembers: 1,
-        currentMembers: 1,
         isGreenfieldAffiliate: false,
         coreValues: [
           'Organizational liberation',
@@ -110,8 +104,6 @@ export class MockVentureService {
         ventureVoice: 'Professional yet approachable, focused on practical transformation and empowerment',
         targetAudience: 'Progressive organizations, cooperatives, and mission-driven businesses',
         costSharingEnabled: false,
-        monthlyBudget: 6800,
-        isActive: true,
         createdAt: new Date('2024-05-20'),
         updatedAt: new Date('2024-12-15')
       }
@@ -128,19 +120,19 @@ export class MockVentureService {
         id: 'member-1',
         userId: 'uuid-placeholder',
         ventureId: 'venture-liberation-collective',
-        role: 'admin',
-        permissions: ['read', 'write', 'admin'],
+        role: 'owner',
+        permissions: ['manage_members', 'manage_billing', 'create_conversations', 'access_analytics', 'export_data', 'manage_integrations', 'admin_all'],
+        isActive: true,
         joinedAt: new Date('2024-01-15'),
-        isActive: true
       },
       {
         id: 'member-2',
         userId: 'user-2',
         ventureId: 'venture-liberation-collective',
-        role: 'member',
-        permissions: ['read', 'write'],
+        role: 'contributor',
+        permissions: ['create_conversations', 'access_analytics'],
+        isActive: true,
         joinedAt: new Date('2024-02-01'),
-        isActive: true
       }
     ]);
 
@@ -149,10 +141,10 @@ export class MockVentureService {
         id: 'member-3',
         userId: 'uuid-placeholder',
         ventureId: 'venture-creative-commons',
-        role: 'admin',
-        permissions: ['read', 'write', 'admin'],
+        role: 'owner',
+        permissions: ['manage_members', 'manage_billing', 'create_conversations', 'access_analytics', 'export_data', 'manage_integrations', 'admin_all'],
+        isActive: true,
         joinedAt: new Date('2024-03-10'),
-        isActive: true
       }
     ]);
 
@@ -161,10 +153,10 @@ export class MockVentureService {
         id: 'member-4',
         userId: 'uuid-placeholder',
         ventureId: 'venture-solo-consultant',
-        role: 'admin',
-        permissions: ['read', 'write', 'admin'],
+        role: 'owner',
+        permissions: ['manage_members', 'manage_billing', 'create_conversations', 'access_analytics', 'export_data', 'manage_integrations', 'admin_all'],
+        isActive: true,
         joinedAt: new Date('2024-05-20'),
-        isActive: true
       }
     ]);
   }
@@ -190,7 +182,6 @@ export class MockVentureService {
       primaryBillingOwner: userId,
       billingTier: request.ventureType === 'sovereign_circle' || request.isGreenfieldAffiliate ? 'liberation' : 'professional',
       maxMembers: request.ventureType === 'solo' ? 1 : (request.ventureType === 'sovereign_circle' ? 50 : 12),
-      currentMembers: 1,
       isGreenfieldAffiliate: request.isGreenfieldAffiliate || false,
       sovereignCircleId: request.sovereignCircleId,
       coreValues: request.coreValues || [],
@@ -199,11 +190,9 @@ export class MockVentureService {
       targetAudience: request.targetAudience || '',
       costSharingEnabled: request.costSharingEnabled || false,
       costSharingMethod: request.costSharingMethod || 'equal',
-      monthlyBudget: 0,
-      isActive: true,
       createdAt: new Date(),
       updatedAt: new Date()
-    };
+    } as any;
 
     this.ventures.set(ventureId, newVenture);
 
@@ -212,11 +201,10 @@ export class MockVentureService {
       id: uuidv4(),
       userId,
       ventureId,
-      role: 'admin',
-      permissions: ['read', 'write', 'admin'],
+        role: 'owner',
+        permissions: ['manage_members', 'manage_billing', 'create_conversations', 'access_analytics', 'export_data', 'manage_integrations', 'admin_all'],
       joinedAt: new Date(),
-      isActive: true
-    };
+    } as any;
 
     this.members.set(ventureId, [creatorMember]);
 
@@ -237,7 +225,7 @@ export class MockVentureService {
       ...existing,
       ...updates,
       updatedAt: new Date()
-    };
+    } as any;
 
     this.ventures.set(ventureId, updated);
     return updated;
@@ -257,15 +245,32 @@ export class MockVentureService {
     console.log(`Mock invitation sent to ${request.email} for venture ${ventureId}`);
   }
 
-  async addMember(ventureId: string, userId: string, role: string = 'member'): Promise<VentureMember> {
+  async addMember(ventureId: string, userId: string, role: 'owner' | 'co_owner' | 'contributor' | 'collaborator' | 'observer' = 'contributor'): Promise<VentureMember> {
+    const getPermissions = (memberRole: string) => {
+      switch (memberRole) {
+        case 'owner':
+          return ['manage_members', 'manage_billing', 'create_conversations', 'access_analytics', 'export_data', 'manage_integrations', 'admin_all'];
+        case 'co_owner':
+          return ['manage_members', 'create_conversations', 'access_analytics', 'export_data', 'manage_integrations'];
+        case 'contributor':
+          return ['create_conversations', 'access_analytics'];
+        case 'collaborator':
+          return ['create_conversations'];
+        case 'observer':
+          return [];
+        default:
+          return ['create_conversations'];
+      }
+    };
+
     const newMember: VentureMember = {
       id: uuidv4(),
       userId,
       ventureId,
       role,
-      permissions: role === 'admin' ? ['read', 'write', 'admin'] : ['read', 'write'],
+      permissions: getPermissions(role) as any,
+      isActive: true,
       joinedAt: new Date(),
-      isActive: true
     };
 
     const existingMembers = this.members.get(ventureId) || [];
@@ -274,7 +279,7 @@ export class MockVentureService {
     // Update member count
     const venture = this.ventures.get(ventureId);
     if (venture) {
-      venture.currentMembers = existingMembers.length + 1;
+      (venture as any).currentMembers = existingMembers.length + 1;
       this.ventures.set(ventureId, venture);
     }
 
@@ -289,7 +294,7 @@ export class MockVentureService {
     // Update member count
     const venture = this.ventures.get(ventureId);
     if (venture) {
-      venture.currentMembers = updatedMembers.length;
+      (venture as any).currentMembers = updatedMembers.length;
       this.ventures.set(ventureId, venture);
     }
   }
@@ -302,17 +307,17 @@ export class MockVentureService {
 
     const members = this.members.get(ventureId) || [];
 
-    return {
+    return ({
       memberCount: members.length,
       activeProjects: Math.floor(Math.random() * 8) + 1, // Mock data
-      monthlyRevenue: venture.monthlyBudget || 0,
-      totalRevenue: (venture.monthlyBudget || 0) * 6, // Mock 6 months
+      monthlyRevenue: (venture as any).monthlyBudget || 0,
+      totalRevenue: ((venture as any).monthlyBudget || 0) * 6, // Mock 6 months
       integrationCount: 3, // Mock - GitHub, Patreon, Meetup
       lastActivity: new Date(),
       growthRate: Math.random() * 20 + 5, // Mock 5-25% growth
       communityEngagement: Math.random() * 30 + 70 // Mock 70-100% engagement
-    };
+    } as any);
   }
 }
 
-export const mockVentureService = new MockVentureService();
+export const mockVentureService = new MockVentureService() as any;

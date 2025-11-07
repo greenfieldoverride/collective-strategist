@@ -65,9 +65,8 @@ function generateSuggestions(contentType: string, platform?: string, tone?: stri
 export async function contentDrafterRoutes(fastify: FastifyInstance) {
   // Generate content with AI Content Drafter
   fastify.post('/content-drafter/generate', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Generate content using AI Content Drafter',
       tags: ['Content Drafter'],
       body: {
         type: 'object',
@@ -245,7 +244,7 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -258,9 +257,8 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
   // Get content drafts for a contextual core
   fastify.get('/content-drafter/drafts/:contextualCoreId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get content drafts for a contextual core',
       tags: ['Content Drafter'],
       params: {
         type: 'object',
@@ -337,7 +335,7 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -350,9 +348,8 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
   // Get a specific content draft
   fastify.get('/content-drafter/drafts/:contextualCoreId/:draftId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get a specific content draft',
       tags: ['Content Drafter'],
       params: {
         type: 'object',
@@ -413,7 +410,7 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -426,9 +423,8 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
   // Update/edit a content draft
   fastify.put('/content-drafter/drafts/:contextualCoreId/:draftId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Update a content draft',
       tags: ['Content Drafter'],
       params: {
         type: 'object',
@@ -499,7 +495,7 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -512,9 +508,8 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
   // Mark content as published
   fastify.post('/content-drafter/drafts/:contextualCoreId/:draftId/publish', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Mark content draft as published',
       tags: ['Content Drafter'],
       params: {
         type: 'object',
@@ -577,7 +572,7 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -590,9 +585,8 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
   // Delete a content draft
   fastify.delete('/content-drafter/drafts/:contextualCoreId/:draftId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Delete a content draft',
       tags: ['Content Drafter'],
       params: {
         type: 'object',
@@ -642,7 +636,7 @@ Value proposition: Expert strategic guidance for sustainable growth`;
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {

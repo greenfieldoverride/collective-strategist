@@ -1,3 +1,4 @@
+/// <reference path="../types/fastify.d.ts" />
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { Database } from '../database/connection'
 import { IntegrationService, IntegrationConfig } from '../services/integration-service'
@@ -68,12 +69,12 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Get venture integrations
-  router.get('/venture/:ventureId', async (req: Request, res: Response) => {
+  fastify.get('/venture/:ventureId', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { ventureId } = req.params
+      const { ventureId } = request.params as any
       
       if (!ventureId) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Venture ID is required'
         })
@@ -81,13 +82,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
 
       const integrations = await integrationService.getVentureIntegrations(ventureId)
       
-      res.json({
+      reply.send({
         success: true,
         data: integrations
       })
     } catch (error) {
       console.error('Error fetching venture integrations:', error)
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to fetch venture integrations'
       })
@@ -95,13 +96,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Add new integration
-  router.post('/venture/:ventureId/connect', async (req: AuthenticatedRequest, res: Response) => {
+  fastify.post('/venture/:ventureId/connect', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { ventureId } = req.params
-      const { platform, credentials, settings = {} } = req.body
+      const { ventureId } = request.params as any
+      const { platform, credentials, settings = {} } = request.body as any
 
       if (!ventureId || !platform || !credentials) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Venture ID, platform, and credentials are required'
         })
@@ -110,7 +111,7 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
       // Validate platform
       const availablePlatforms = await integrationService.getAvailableIntegrations()
       if (!availablePlatforms.includes(platform)) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: `Unsupported platform: ${platform}`
         })
@@ -127,7 +128,7 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
 
       await integrationService.addIntegration(config)
 
-      res.json({
+      reply.send({
         success: true,
         message: `${getIntegrationDisplayName(platform)} integration connected successfully`
       })
@@ -135,13 +136,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
       console.error('Error adding integration:', error)
       
       if (error instanceof Error && error.message.includes('Authentication failed')) {
-        return res.status(401).json({
+        return reply.status(401).send({
           success: false,
           error: 'Invalid credentials provided'
         })
       }
 
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to connect integration'
       })
@@ -149,12 +150,12 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Remove integration
-  router.delete('/venture/:ventureId/:platform', async (req: AuthenticatedRequest, res: Response) => {
+  fastify.delete('/venture/:ventureId/:platform', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { ventureId, platform } = req.params
+      const { ventureId, platform } = request.params as any
 
       if (!ventureId || !platform) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Venture ID and platform are required'
         })
@@ -162,13 +163,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
 
       await integrationService.removeIntegration(ventureId, platform)
 
-      res.json({
+      reply.send({
         success: true,
         message: `${getIntegrationDisplayName(platform)} integration disconnected successfully`
       })
     } catch (error) {
       console.error('Error removing integration:', error)
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to disconnect integration'
       })
@@ -176,12 +177,12 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Sync single integration
-  router.post('/venture/:ventureId/:platform/sync', async (req: AuthenticatedRequest, res: Response) => {
+  fastify.post('/venture/:ventureId/:platform/sync', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { ventureId, platform } = req.params
+      const { ventureId, platform } = request.params as any
 
       if (!ventureId || !platform) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Venture ID and platform are required'
         })
@@ -189,7 +190,7 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
 
       const result = await integrationService.syncIntegration(ventureId, platform)
 
-      res.json({
+      reply.send({
         success: true,
         data: result,
         message: `${getIntegrationDisplayName(platform)} sync completed`
@@ -198,13 +199,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
       console.error('Error syncing integration:', error)
       
       if (error instanceof Error && error.message.includes('Authentication failed')) {
-        return res.status(401).json({
+        return reply.status(401).send({
           success: false,
           error: 'Authentication failed - please reconnect your account'
         })
       }
 
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to sync integration'
       })
@@ -212,12 +213,12 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Sync all integrations for a venture
-  router.post('/venture/:ventureId/sync-all', async (req: AuthenticatedRequest, res: Response) => {
+  fastify.post('/venture/:ventureId/sync-all', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { ventureId } = req.params
+      const { ventureId } = request.params as any
 
       if (!ventureId) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Venture ID is required'
         })
@@ -239,14 +240,14 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
         }))
       }
 
-      res.json({
+      reply.send({
         success: true,
         data: summary,
         message: `Synced ${summary.totalSynced} integrations with ${summary.totalTransactions} total transactions`
       })
     } catch (error) {
       console.error('Error syncing all integrations:', error)
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to sync integrations'
       })
@@ -254,23 +255,23 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Handle webhooks
-  router.post('/webhooks/:platform', async (req: Request, res: Response) => {
+  fastify.post('/webhooks/:platform', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { platform } = req.params
-      const signature = req.headers['x-webhook-signature'] as string || 
-                       req.headers['stripe-signature'] as string ||
-                       req.headers['paypal-transmission-sig'] as string
+      const { platform } = request.params as any
+      const signature = request.headers['x-webhook-signature'] as string || 
+                       request.headers['stripe-signature'] as string ||
+                       request.headers['paypal-transmission-sig'] as string
 
       if (!signature) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Missing webhook signature'
         })
       }
 
-      await integrationService.handleWebhook(platform, req.body, signature)
+      await integrationService.handleWebhook(platform, request.body as any, signature)
 
-      res.json({
+      reply.send({
         success: true,
         message: 'Webhook processed successfully'
       })
@@ -278,13 +279,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
       console.error('Error processing webhook:', error)
       
       if (error instanceof Error && error.message.includes('Invalid webhook signature')) {
-        return res.status(401).json({
+        return reply.status(401).send({
           success: false,
           error: 'Invalid webhook signature'
         })
       }
 
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to process webhook'
       })
@@ -292,12 +293,12 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
   })
 
   // Get integration status and health
-  router.get('/venture/:ventureId/status', async (req: Request, res: Response) => {
+  fastify.get('/venture/:ventureId/status', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { ventureId } = req.params
+      const { ventureId } = request.params as any
       
       if (!ventureId) {
-        return res.status(400).json({
+        return reply.status(400).send({
           success: false,
           error: 'Venture ID is required'
         })
@@ -317,7 +318,7 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
                ? 'healthy' : 'stale'
       }))
 
-      res.json({
+      reply.send({
         success: true,
         data: {
           totalIntegrations: status.length,
@@ -328,14 +329,13 @@ export async function integrationsRoutes(fastify: FastifyInstance, options: { db
       })
     } catch (error) {
       console.error('Error fetching integration status:', error)
-      res.status(500).json({
+      reply.status(500).send({
         success: false,
         error: 'Failed to fetch integration status'
       })
     }
   })
 
-  return router
 }
 
 // Helper functions for integration metadata

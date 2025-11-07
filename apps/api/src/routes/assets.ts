@@ -32,7 +32,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         }
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
@@ -66,7 +66,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         }
       };
     } catch (error) {
-      fastify.log.error('Failed to get assets:', error);
+      console.error(`Failed to get assets: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to get assets' });
     }
   });
@@ -85,7 +85,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
@@ -132,7 +132,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
 
       reply.status(201).send({ asset });
     } catch (error) {
-      fastify.log.error('Failed to upload asset:', error);
+      console.error(`Failed to upload asset: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to upload asset' });
     }
   });
@@ -151,7 +151,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId', 'assetId']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { assetId } = request.params;
@@ -161,7 +161,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
       if (error instanceof Error && error.message === 'Asset not found') {
         reply.status(404).send({ error: 'Asset not found' });
       } else {
-        fastify.log.error('Failed to get asset:', error);
+        console.error(`Failed to get asset: ${error instanceof Error ? error.message : String(error)}`);
         reply.status(500).send({ error: 'Failed to get asset' });
       }
     }
@@ -192,7 +192,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         }
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { assetId } = request.params;
@@ -201,7 +201,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
       const asset = await assetService.updateAsset(assetId, updates);
       return { asset };
     } catch (error) {
-      fastify.log.error('Failed to update asset:', error);
+      console.error(`Failed to update asset: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to update asset' });
     }
   });
@@ -220,14 +220,14 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId', 'assetId']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { assetId } = request.params;
       await assetService.deleteAsset(assetId);
       reply.status(204).send();
     } catch (error) {
-      fastify.log.error('Failed to delete asset:', error);
+      console.error(`Failed to delete asset: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to delete asset' });
     }
   });
@@ -247,14 +247,14 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
       const tags = await assetService.getTags(ventureId);
       return { tags };
     } catch (error) {
-      fastify.log.error('Failed to get tags:', error);
+      console.error(`Failed to get tags: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to get tags' });
     }
   });
@@ -281,7 +281,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['name']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
@@ -296,7 +296,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
 
       reply.status(201).send({ tag });
     } catch (error) {
-      fastify.log.error('Failed to create tag:', error);
+      console.error(`Failed to create tag: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to create tag' });
     }
   });
@@ -316,14 +316,14 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
       const brandIdentity = await assetService.getBrandIdentity(ventureId);
       return { brandIdentity };
     } catch (error) {
-      fastify.log.error('Failed to get brand identity:', error);
+      console.error(`Failed to get brand identity: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to get brand identity' });
     }
   });
@@ -352,7 +352,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['element_type', 'element_value']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
@@ -365,7 +365,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
 
       reply.status(201).send({ element });
     } catch (error) {
-      fastify.log.error('Failed to create brand element:', error);
+      console.error(`Failed to create brand element: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to create brand element' });
     }
   });
@@ -393,7 +393,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['used_in_type']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { assetId } = request.params;
@@ -402,7 +402,7 @@ export async function assetRoutes(fastify: FastifyInstance) {
       await assetService.trackAssetUsage(assetId, used_in_type, used_in_id, usage_context);
       reply.status(201).send({ success: true });
     } catch (error) {
-      fastify.log.error('Failed to track asset usage:', error);
+      console.error(`Failed to track asset usage: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to track asset usage' });
     }
   });
@@ -421,14 +421,14 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId', 'assetId']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { assetId } = request.params;
       const usage = await assetService.getAssetUsage(assetId);
       return { usage };
     } catch (error) {
-      fastify.log.error('Failed to get asset usage:', error);
+      console.error(`Failed to get asset usage: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to get asset usage' });
     }
   });
@@ -436,17 +436,16 @@ export async function assetRoutes(fastify: FastifyInstance) {
   // Convenience endpoints for specific asset types
   fastify.get('/ventures/:ventureId/assets/brand', {
     schema: {
-      description: 'Get all brand assets for a venture',
       tags: ['Assets']
-    },
-    preHandler: fastify.authenticate
+    } as any,
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId } = request.params;
       const assets = await assetService.getBrandAssets(ventureId);
       return { assets };
     } catch (error) {
-      fastify.log.error('Failed to get brand assets:', error);
+      console.error(`Failed to get brand assets: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to get brand assets' });
     }
   });
@@ -464,14 +463,14 @@ export async function assetRoutes(fastify: FastifyInstance) {
         required: ['ventureId', 'type']
       }
     },
-    preHandler: fastify.authenticate
+    preHandler: [(fastify as any).authenticate]
   }, async (request: any, reply) => {
     try {
       const { ventureId, type } = request.params;
       const assets = await assetService.getAssetsByType(ventureId, type);
       return { assets };
     } catch (error) {
-      fastify.log.error('Failed to get assets by type:', error);
+      console.error(`Failed to get assets by type: ${error instanceof Error ? error.message : String(error)}`);
       reply.status(500).send({ error: 'Failed to get assets by type' });
     }
   });

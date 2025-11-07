@@ -47,9 +47,8 @@ const analyticsSchema = z.object({
 export async function socialMediaRoutes(fastify: FastifyInstance) {
   // Connect social media account
   fastify.post('/social-media/connect', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Connect a social media account',
       tags: ['Social Media'],
       body: {
         type: 'object',
@@ -133,7 +132,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error: any) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -146,9 +145,8 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
   // Get connected social media accounts
   fastify.get('/social-media/accounts', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get connected social media accounts',
       tags: ['Social Media'],
       response: {
         200: {
@@ -198,7 +196,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -211,9 +209,8 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
   // Publish content to social media
   fastify.post('/social-media/publish', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Publish content to social media platform',
       tags: ['Social Media'],
         body: {
           type: 'object',
@@ -315,7 +312,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
       const post: SocialPostRequest = {
         platform: account.platform,
         content,
-        media,
+        media: media as any,
         scheduledFor: scheduledFor ? new Date(scheduledFor) : undefined,
         hashtags,
         mentions
@@ -356,7 +353,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error: any) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -369,9 +366,8 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
   // Get market data from social platforms
   fastify.post('/social-media/market-data', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get market data from social media platforms',
       tags: ['Social Media'],
       body: {
         type: 'object',
@@ -418,7 +414,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
         });
       }
 
-      const marketDataRequest: MarketDataRequest = validation.data;
+      const marketDataRequest: MarketDataRequest = validation.data as MarketDataRequest;
       const marketData = await socialMediaClient.getMarketData(marketDataRequest);
 
       const response: StrategistResponse<typeof marketData> = {
@@ -432,7 +428,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error: any) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -445,9 +441,8 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
   // Get analytics for connected social media account
   fastify.get('/social-media/analytics/:accountId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Get analytics for a connected social media account',
       tags: ['Social Media'],
       params: {
         type: 'object',
@@ -525,7 +520,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error: any) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -538,9 +533,8 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
   // Disconnect social media account
   fastify.delete('/social-media/accounts/:accountId', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Disconnect a social media account',
       tags: ['Social Media'],
       params: {
         type: 'object',
@@ -570,7 +564,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {
@@ -583,9 +577,8 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
   // Validate social media account connection
   fastify.post('/social-media/accounts/:accountId/validate', {
-    preHandler: [fastify.authenticate],
+    preHandler: [(fastify as any).authenticate],
     schema: {
-      description: 'Validate social media account connection',
       tags: ['Social Media'],
       params: {
         type: 'object',
@@ -651,7 +644,7 @@ export async function socialMediaRoutes(fastify: FastifyInstance) {
 
       return reply.send(response);
     } catch (error) {
-      fastify.log.error(error);
+      console.error(error);
       return reply.status(500).send({
         success: false,
         error: {

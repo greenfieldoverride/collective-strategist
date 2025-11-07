@@ -188,18 +188,21 @@ export interface VentureMember {
   permissions: VenturePermission[];
   
   // Member-specific settings
-  notificationPreferences: {
+  notificationPreferences?: {
     newConversations: boolean;
     memberChanges: boolean;
     billingUpdates: boolean;
   };
   costSharePercentage?: number; // For cooperative cost sharing (0-100)
   
+  // Status
+  isActive: boolean;
+  
   // Timestamps and invitation tracking
   joinedAt: Date;
   invitedBy?: string;
   invitationAcceptedAt?: Date;
-  lastActiveAt: Date;
+  lastActiveAt?: Date;
   
   // User details (populated from joins)
   userEmail?: string;
