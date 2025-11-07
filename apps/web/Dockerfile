@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy package files for the web app
 COPY apps/web/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Copy source code
 COPY apps/web/ .
