@@ -17,6 +17,7 @@
     "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
+    "@greenfield/react-guided-tour": "file:../../shared/react-guided-tour",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^10.1.0",

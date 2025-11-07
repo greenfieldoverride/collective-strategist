@@ -3,15 +3,27 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files for the web app
-COPY apps/web/package*.json ./
-RUN npm ci && npm cache clean --force
+# Copy workspace files
+COPY package*.json ./
+COPY apps/web/package*.json ./apps/web/
+COPY shared/react-guided-tour/package*.json ./shared/react-guided-tour/
 
-# Copy source code
-COPY apps/web/ .
+# Install workspace dependencies
+RUN npm ci
 
-# Build the application
-RUN npm run build
+# Copy shared packages source
+COPY shared/react-guided-tour/ ./shared/react-guided-tour/
+
+# Build shared packages first
+WORKDIR /app/shared/react-guided-tour
+RUN npm ci && npm run build
+
+# Copy web app source and build
+WORKDIR /app
+COPY apps/web/ ./apps/web/
+
+WORKDIR /app/apps/web
+RUN npm ci && npm run build
 
 # Production stage with nginx
 FROM nginx:alpine
