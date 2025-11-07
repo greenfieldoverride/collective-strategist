@@ -32,7 +32,7 @@ FROM nginx:alpine
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built app from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
