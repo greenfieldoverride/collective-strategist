@@ -17,11 +17,13 @@ interface AuthResponse {
   }
 }
 
+import { apiUrl } from '../config'
+
 class AuthApiService {
   private baseUrl: string
 
   constructor() {
-    this.baseUrl = 'http://localhost:8007'
+    this.baseUrl = apiUrl('')
   }
 
   private getAuthToken(): string | null {

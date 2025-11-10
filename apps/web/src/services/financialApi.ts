@@ -1,6 +1,7 @@
 import { APIResponse } from '../types/venture'
+import { apiUrl } from '../config'
 
-const API_BASE = 'http://localhost:8007/api/v1'
+const API_BASE = apiUrl('api/v1')
 
 export interface FinancialMetrics {
   monthlyIncome: number

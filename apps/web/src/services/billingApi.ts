@@ -62,11 +62,13 @@ interface ApiResponse<T> {
   }
 }
 
+import { apiUrl } from '../config'
+
 class BillingApiService {
   private baseUrl: string
 
   constructor() {
-    this.baseUrl = 'http://localhost:8007'
+    this.baseUrl = apiUrl('')
   }
 
   private getAuthToken(): string | null {

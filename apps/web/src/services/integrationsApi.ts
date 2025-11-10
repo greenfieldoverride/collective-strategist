@@ -49,11 +49,13 @@ interface SyncAllResult {
   }>
 }
 
+import { apiUrl } from '../config'
+
 class IntegrationsApiService {
   private baseUrl: string
 
   constructor() {
-    this.baseUrl = 'http://localhost:8007'
+    this.baseUrl = apiUrl('')
   }
 
   async getAvailableIntegrations(): Promise<AvailableIntegration[]> {
