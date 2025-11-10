@@ -105,7 +105,7 @@ export class VentureService {
       }
 
       // Sort clause
-      const sortBy = request.sortBy || 'updatedAt';
+      const sortBy = request.sortBy || 'updated_at';
       const sortOrder = request.sortOrder || 'desc';
       const orderClause = `ORDER BY v.${sortBy} ${sortOrder}`;
 
