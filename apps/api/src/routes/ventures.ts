@@ -191,76 +191,7 @@ export async function ventureRoutes(fastify: FastifyInstance) {
         };
       }
       
-      // TEMPORARY: Mock data for MVP testing (replace with real DB when ready)
-      const mockVentures = [
-        {
-          id: '550e8400-e29b-41d4-a716-446655440000',
-          name: 'Liberation Collective',
-          ventureType: 'cooperative',
-          primaryBillingOwner: userId,
-          billingTier: 'liberation',
-          maxMembers: 50,
-          status: 'active',
-          isGreenfieldAffiliate: true,
-          sovereignCircleId: 'sovereign-circle-1',
-          coreValues: [
-            'Community sovereignty',
-            'Open source technology',
-            'Economic justice',
-            'Mutual aid'
-          ],
-          primaryGoals: [
-            'Build liberation-focused software tools',
-            'Support local community resilience',
-            'Create sustainable funding models',
-            'Share knowledge freely'
-          ],
-          ventureVoice: 'Collaborative, empowering, and focused on systemic change.',
-          targetAudience: 'Activists, technologists, and community organizers working toward liberation',
-          costSharingEnabled: true,
-          costSharingMethod: 'contribution_based',
-          createdAt: new Date('2024-01-15'),
-          updatedAt: new Date('2024-12-01'),
-          lastActivityAt: new Date('2024-12-01')
-        },
-        {
-          id: '550e8400-e29b-41d4-a716-446655440001',
-          name: 'Creative Commons Studio',
-          ventureType: 'professional',
-          primaryBillingOwner: userId,
-          billingTier: 'professional',
-          maxMembers: 12,
-          status: 'active',
-          isGreenfieldAffiliate: false,
-          coreValues: [
-            'Artistic freedom',
-            'Cultural preservation',
-            'Anti-capitalist creativity',
-            'Community storytelling'
-          ],
-          primaryGoals: [
-            'Create independent media content',
-            'Support marginalized artists',
-            'Build sustainable creative economy',
-            'Preserve cultural knowledge'
-          ],
-          ventureVoice: 'Creative, inclusive, and culturally rooted.',
-          targetAudience: 'Artists, cultural workers, and communities seeking authentic representation',
-          costSharingEnabled: true,
-          costSharingMethod: 'equal',
-          createdAt: new Date('2024-03-10'),
-          updatedAt: new Date('2024-11-28'),
-          lastActivityAt: new Date('2024-11-28')
-        }
-      ];
-      
-      const result = {
-        ventures: mockVentures,
-        totalCount: mockVentures.length,
-        hasMore: false
-      };
-      
-      // const result = await ventureService.getVentures(userId, validation.data);
+      const result = await ventureService.getVentures(userId, validation.data);
 
       // Cache the result for 5 minutes
       await cacheService.set(cacheKey, result, CacheService.TTL.FIVE_MINUTES);
