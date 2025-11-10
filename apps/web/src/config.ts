@@ -17,7 +17,8 @@ export const apiUrl = (endpoint: string): string => {
   // Remove leading slash if present to avoid double slashes
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
   
-  if (config.apiBaseUrl) {
+  // If we have a base URL (development), use it
+  if (config.apiBaseUrl && config.apiBaseUrl.length > 0) {
     return `${config.apiBaseUrl}/${cleanEndpoint}`;
   }
   

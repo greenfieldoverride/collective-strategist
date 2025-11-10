@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { apiUrl } from '../config'
 
 // Types for shared context
 export interface CalendarEvent {
@@ -169,7 +170,7 @@ export function VentureProvider({ children, ventureId }: VentureProviderProps) {
   const loadVentureData = async (ventureId: string) => {
     try {
       // Load calendar events
-      const eventsResponse = await fetch(`http://localhost:8007/api/v1/calendar/events?ventureId=${ventureId}`, {
+      const eventsResponse = await fetch(apiUrl(`api/v1/calendar/events?ventureId=${ventureId}`), {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
       
@@ -179,7 +180,7 @@ export function VentureProvider({ children, ventureId }: VentureProviderProps) {
       }
 
       // Load shared assets
-      const assetsResponse = await fetch(`http://localhost:8007/api/v1/assets/shared?ventureId=${ventureId}`, {
+      const assetsResponse = await fetch(apiUrl(`api/v1/assets/shared?ventureId=${ventureId}`), {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
       
@@ -189,7 +190,7 @@ export function VentureProvider({ children, ventureId }: VentureProviderProps) {
       }
 
       // Load shared templates
-      const templatesResponse = await fetch(`http://localhost:8007/api/v1/templates/shared?ventureId=${ventureId}`, {
+      const templatesResponse = await fetch(apiUrl(`api/v1/templates/shared?ventureId=${ventureId}`), {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
       
@@ -199,7 +200,7 @@ export function VentureProvider({ children, ventureId }: VentureProviderProps) {
       }
 
       // Load shared tags
-      const tagsResponse = await fetch(`http://localhost:8007/api/v1/tags/shared?ventureId=${ventureId}`, {
+      const tagsResponse = await fetch(apiUrl(`api/v1/tags/shared?ventureId=${ventureId}`), {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
       
@@ -209,7 +210,7 @@ export function VentureProvider({ children, ventureId }: VentureProviderProps) {
       }
 
       // Load calendar connections
-      const connectionsResponse = await fetch(`http://localhost:8007/api/v1/calendar/connections?ventureId=${ventureId}`, {
+      const connectionsResponse = await fetch(apiUrl(`api/v1/calendar/connections?ventureId=${ventureId}`), {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
       
