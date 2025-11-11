@@ -1,8 +1,9 @@
 /// <reference path="../types/fastify.d.ts" />
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
-import { Pool } from 'pg';
+
 import { User, StrategistResponse } from '../types/collective-strategist';
+import { db } from '../database/connection';
 import { UserService, CreateUserRequest, ChangePasswordRequest } from '../services/user-service';
 
 // Create pool directly with correct environment variables
@@ -60,19 +61,8 @@ const consultantPreferencesSchema = z.object({
 });
 
 export async function authRoutes(fastify: FastifyInstance) {
-  // Initialize UserService with correct environment variables
-  const pool = new Pool({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    database: process.env.DB_NAME || 'collective_strategist',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || (process.env.DB_USER === 'alyssapowell' ? undefined : 'postgres'),
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-  });
-  
-  const userService = new UserService(pool);
+  // Use shared database connection for DRY principle - same connection as all other routes
+  const userService = new UserService(db.poolInstance);
   // User registration
   fastify.post('/auth/register', {
     schema: {
