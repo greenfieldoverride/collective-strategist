@@ -55,18 +55,18 @@ class IntegrationsApiService {
   private baseUrl: string
 
   constructor() {
-    this.baseUrl = apiUrl('')
+    this.baseUrl = apiUrl('api/v1')
   }
 
   async getAvailableIntegrations(): Promise<AvailableIntegration[]> {
-    const response = await fetch(`${this.baseUrl}/api/integrations/available`)
+    const response = await fetch(`${this.baseUrl}/integrations/available`)
     if (!response.ok) throw new Error('Failed to fetch available integrations')
     const data = await response.json()
     return data.data
   }
 
   async getVentureIntegrations(ventureId: string): Promise<IntegrationConfig[]> {
-    const response = await fetch(`${this.baseUrl}/api/integrations/venture/${ventureId}`)
+    const response = await fetch(`${this.baseUrl}/integrations/venture/${ventureId}`)
     if (!response.ok) throw new Error('Failed to fetch venture integrations')
     const data = await response.json()
     return data.data.map((integration: any) => ({
@@ -81,7 +81,7 @@ class IntegrationsApiService {
     credentials: IntegrationCredentials,
     settings?: Record<string, any>
   ): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/api/integrations/venture/${ventureId}/connect`, {
+    const response = await fetch(`${this.baseUrl}/integrations/venture/${ventureId}/connect`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ platform, credentials, settings })
@@ -93,7 +93,7 @@ class IntegrationsApiService {
   }
 
   async disconnectIntegration(ventureId: string, platform: string): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/api/integrations/venture/${ventureId}/${platform}`, {
+    const response = await fetch(`${this.baseUrl}/integrations/venture/${ventureId}/${platform}`, {
       method: 'DELETE'
     })
     if (!response.ok) {
@@ -103,7 +103,7 @@ class IntegrationsApiService {
   }
 
   async syncIntegration(ventureId: string, platform: string): Promise<SyncResult> {
-    const response = await fetch(`${this.baseUrl}/api/integrations/venture/${ventureId}/${platform}/sync`, {
+    const response = await fetch(`${this.baseUrl}/integrations/venture/${ventureId}/${platform}/sync`, {
       method: 'POST'
     })
     if (!response.ok) {
@@ -115,7 +115,7 @@ class IntegrationsApiService {
   }
 
   async syncAllIntegrations(ventureId: string): Promise<SyncAllResult> {
-    const response = await fetch(`${this.baseUrl}/api/integrations/venture/${ventureId}/sync-all`, {
+    const response = await fetch(`${this.baseUrl}/integrations/venture/${ventureId}/sync-all`, {
       method: 'POST'
     })
     if (!response.ok) throw new Error('Failed to sync integrations')

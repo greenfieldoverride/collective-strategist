@@ -33,7 +33,7 @@ services:
   core-api:
     build:
       context: ./apps/api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.simple
     ports:
       - "${API_PORT}:${API_PORT}"
     environment:

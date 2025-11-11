@@ -26,6 +26,7 @@ import { financialAnalyticsRoutes } from './routes/financial-analytics';
 // import impactDashboardRoutes from './routes/impact-dashboard-fastify';
 import { assetRoutes } from './routes/assets';
 import billingRoutes from './routes/billing';
+import { calendarRoutes } from './routes/calendar';
 import { db } from './database/connection';
 import { cacheService } from './services/cache-service';
 // import { initializeEventClient, closeEventClient } from './events/client';
@@ -173,6 +174,7 @@ async function build() {
   // await fastify.register(integrationsRoutes, { prefix: '/api/v1/integrations', db });
   // await fastify.register(impactDashboardRoutes, { prefix: '/api/v1' });
   await fastify.register(assetRoutes, { prefix: '/api/v1' });
+  await fastify.register(calendarRoutes, { prefix: '/api/v1' });
   await fastify.register(billingRoutes);
 
   // API Info endpoint
