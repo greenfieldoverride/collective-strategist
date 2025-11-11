@@ -640,7 +640,7 @@ export interface GetVenturesRequest {
   ventureType?: 'sovereign_circle' | 'professional' | 'cooperative' | 'solo';
   status?: 'active' | 'archived' | 'suspended';
   search?: string;
-  sortBy?: 'createdAt' | 'updatedAt' | 'lastActivityAt' | 'name';
+  sortBy?: 'created_at' | 'updated_at' | 'last_active_at' | 'name';
   sortOrder?: 'asc' | 'desc';
   includeMembers?: boolean;
 }

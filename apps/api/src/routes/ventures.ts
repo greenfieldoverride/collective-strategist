@@ -47,7 +47,7 @@ const getVenturesSchema = z.object({
   ventureType: z.enum(['sovereign_circle', 'professional', 'cooperative', 'solo']).optional(),
   status: z.enum(['active', 'archived', 'suspended']).optional(),
   search: z.string().optional(),
-  sortBy: z.enum(['createdAt', 'updatedAt', 'lastActivityAt', 'name']).optional(),
+  sortBy: z.enum(['created_at', 'updated_at', 'last_active_at', 'name']).optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
   includeMembers: z.coerce.boolean().optional()
 });
@@ -149,8 +149,8 @@ export async function ventureRoutes(fastify: FastifyInstance) {
           search: { type: 'string' },
           sortBy: { 
             type: 'string',
-            enum: ['createdAt', 'updatedAt', 'lastActivityAt', 'name'],
-            default: 'updatedAt'
+            enum: ['created_at', 'updated_at', 'last_active_at', 'name'],
+            default: 'updated_at'
           },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' },
           includeMembers: { type: 'boolean', default: false }
