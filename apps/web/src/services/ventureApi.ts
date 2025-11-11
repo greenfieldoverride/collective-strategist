@@ -66,9 +66,9 @@ class VentureAPIService {
       })
     }
     
-    // Use demo endpoint for development
+    // Get real user ventures with authentication
     const response = await this.makeRequest<{ ventures: Venture[]; total: number; hasMore: boolean }>(
-      `/ventures/demo`
+      `/ventures?${searchParams}`
     )
     
     if (!response.success || !response.data) {
