@@ -1,4 +1,19 @@
-import { EventClient, EventClientConfig } from '@collective-strategist/events';
+// import { EventClient, EventClientConfig } from '@collective-strategist/events';
+
+interface EventClientConfig {
+  redis: {
+    host: string;
+    port: number;
+    password?: string;
+    db: number;
+  };
+}
+
+class EventClient {
+  constructor(config: EventClientConfig) {}
+  async connect(): Promise<void> {}
+  async disconnect(): Promise<void> {}
+}
 
 const eventClientConfig: EventClientConfig = {
   redis: {

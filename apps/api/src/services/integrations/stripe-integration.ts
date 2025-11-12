@@ -13,7 +13,7 @@ export class StripeIntegration implements PlatformIntegration {
       }
 
       this.stripe = new Stripe(credentials.secretKey, {
-        apiVersion: '2025-09-30.clover',
+        apiVersion: '2024-10-28.acacia' as any,
         typescript: true
       })
 

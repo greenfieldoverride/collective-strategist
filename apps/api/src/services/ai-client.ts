@@ -1,9 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
-import { AIGenerationOptions } from '@collective-strategist/types';
+// import { AIGenerationOptions } from '@collective-strategist/types';
+
+interface AIGenerationOptions {
+  [key: string]: any;
+}
 
 export interface AIRequest {
   user_id: string;
-  prompt: string;
+  venture_id?: string;
+  context?: string;
+  tone?: string;
+  prompt?: string;
   options?: AIGenerationOptions;
 }
 
