@@ -1,10 +1,10 @@
 // Configuration for The Collective Strategist frontend
 
 export const config = {
-  // API Base URL - uses relative path for production (proxied by nginx)
+  // API Base URL - uses domain-relative path for production
   // Falls back to localhost for development
   apiBaseUrl: (import.meta as any).env?.PROD 
-    ? '' // In production, use relative paths (nginx proxy handles routing)
+    ? 'https://strategist.greenfieldoverride.com' // Production domain
     : 'http://localhost:8007', // Development
   
   // Other environment-specific settings
