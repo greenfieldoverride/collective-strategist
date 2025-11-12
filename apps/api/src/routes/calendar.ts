@@ -90,7 +90,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error fetching calendar events:', error);
+      fastify.log.error({ error }, 'Error fetching calendar events');
       return reply.status(500).send({ 
         error: 'Failed to fetch calendar events',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -201,7 +201,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error creating calendar event:', error);
+      fastify.log.error({ error }, 'Error creating calendar event');
       return reply.status(500).send({ 
         error: 'Failed to create calendar event',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -245,7 +245,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error deleting calendar event:', error);
+      fastify.log.error({ error }, 'Error deleting calendar event');
       return reply.status(500).send({ 
         error: 'Failed to delete calendar event',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -276,7 +276,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error fetching calendar connections:', error);
+      fastify.log.error({ error }, 'Error fetching calendar connections');
       return reply.status(500).send({ 
         error: 'Failed to fetch calendar connections',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -321,7 +321,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error connecting calendar:', error);
+      fastify.log.error({ error }, 'Error connecting calendar');
       return reply.status(500).send({ 
         error: 'Failed to connect calendar',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -356,7 +356,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error disconnecting calendar:', error);
+      fastify.log.error({ error }, 'Error disconnecting calendar');
       return reply.status(500).send({ 
         error: 'Failed to disconnect calendar',
         details: error instanceof Error ? error.message : 'Unknown error'
@@ -397,7 +397,7 @@ export async function calendarRoutes(fastify: FastifyInstance) {
       });
 
     } catch (error) {
-      fastify.log.error('Error syncing calendar:', error);
+      fastify.log.error({ error }, 'Error syncing calendar');
       return reply.status(500).send({ 
         error: 'Failed to sync calendar',
         details: error instanceof Error ? error.message : 'Unknown error'
