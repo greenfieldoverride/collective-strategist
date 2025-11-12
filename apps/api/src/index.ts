@@ -28,7 +28,7 @@ import { assetRoutes } from './routes/assets';
 import billingRoutes from './routes/billing';
 import { calendarRoutes } from './routes/calendar';
 import { db } from './database/connection';
-import { cacheService } from './services/cache-service';
+// import { cacheService } from './services/cache-service';
 // import { initializeEventClient, closeEventClient } from './events/client';
 
 const fastify = Fastify({ 
@@ -147,7 +147,7 @@ async function build() {
       version: '1.0.0',
       services: {
         database: 'connected', // TODO: Add actual DB health check
-        redis: cacheService.isConnected() ? 'connected' : 'disconnected', 
+        redis: 'disabled', // cacheService.isConnected() ? 'connected' : 'disconnected', 
         ai_integration: 'available'
       }
     };
@@ -233,8 +233,8 @@ async function build() {
 async function start() {
   try {
     // Initialize cache service
-    await cacheService.connect();
-    console.log('Cache service initialized');
+    // await cacheService.connect();
+    // console.log('Cache service initialized');
     
     // Initialize event client
     // await initializeEventClient();
@@ -250,7 +250,7 @@ async function start() {
     process.on('SIGTERM', async () => {
       console.log('Received SIGTERM, shutting down gracefully');
       await app.close();
-      await cacheService.disconnect();
+      // await cacheService.disconnect();
       // await closeEventClient();
       process.exit(0);
     });
