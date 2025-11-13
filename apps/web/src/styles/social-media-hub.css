@@ -684,7 +684,7 @@
 }
 
 .calendar-header-cell {
-  @apply p-3 text-center font-medium text-gray-700 border-r border-gray-200 last:border-r-0;
+  @apply p-4 text-center font-semibold text-gray-800 border-r border-gray-200 last:border-r-0 text-sm uppercase tracking-wide;
 }
 
 .calendar-body {
@@ -696,7 +696,7 @@
 }
 
 .calendar-day {
-  @apply min-h-24 p-2 border-r border-gray-200 last:border-r-0 cursor-pointer hover:bg-gray-50 relative;
+  @apply min-h-32 p-3 border-r border-gray-200 last:border-r-0 cursor-pointer hover:bg-gray-50 relative;
 }
 
 .calendar-day.other-month {
@@ -708,7 +708,7 @@
 }
 
 .day-number {
-  @apply text-sm font-medium mb-1;
+  @apply text-base font-semibold mb-2;
 }
 
 .day-posts {

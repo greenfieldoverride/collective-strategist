@@ -110,7 +110,8 @@ export default function DashboardWithVentures() {
     { id: 'ai-consultant', name: 'AI Consultant', IconComponent: AIConsultantIcon },
     { id: 'integrations', name: 'Integration Hub', IconComponent: IntegrationsIcon },
     { id: 'team', name: 'Team', IconComponent: TeamIcon },
-    { id: 'billing', name: 'Billing', IconComponent: BillingIcon },
+    // Only show billing for non-sovereign circle plans
+    ...(selectedVenture?.ventureType !== 'sovereign_circle' ? [{ id: 'billing', name: 'Billing', IconComponent: BillingIcon }] : []),
     { id: 'content', name: 'Content Studio', IconComponent: ContentStudioIcon },
     { id: 'social', name: 'Social Media', IconComponent: SocialMediaIcon },
     { id: 'calendar', name: 'Calendar Hub', IconComponent: CalendarIcon }

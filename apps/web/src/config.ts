@@ -1,15 +1,19 @@
 // Configuration for The Collective Strategist frontend
 
+// Detect production environment more reliably
+const isProduction = typeof window !== 'undefined' && 
+  (window.location.hostname === 'strategist.greenfieldoverride.com' || 
+   (import.meta as any).env?.PROD === true);
+
 export const config = {
-  // API Base URL - uses domain-relative path for production
-  // Falls back to localhost for development
-  apiBaseUrl: (import.meta as any).env?.PROD 
+  // API Base URL - use production domain or localhost
+  apiBaseUrl: isProduction 
     ? 'https://strategist.greenfieldoverride.com' // Production domain
     : 'http://localhost:8007', // Development
   
   // Other environment-specific settings
-  isDevelopment: (import.meta as any).env?.DEV,
-  isProduction: (import.meta as any).env?.PROD,
+  isDevelopment: !isProduction,
+  isProduction: isProduction,
 };
 
 // Helper function to build API URLs

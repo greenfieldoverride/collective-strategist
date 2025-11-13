@@ -133,36 +133,44 @@ export function IntegrationsPage({ ventureId }: IntegrationsPageProps) {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      {/* Header Section */}
-      <div id="integration-header" className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Payment Integration Hub</h1>
-          <p className="text-gray-600 mt-2">Connect your payment platforms to automatically track your liberation work finances</p>
-          <button
-            onClick={startTour}
-            className="mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm flex items-center gap-2"
-          >
-            🎯 Start Integration Tour
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Header Section */}
+        <div id="integration-header" className="text-center mb-12">
+          <div className="relative">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+              Financial Liberation Hub
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Connect your payment platforms to automatically track income, reduce platform dependency, and maintain financial sovereignty
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+              <button
+                onClick={startTour}
+                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2"
+              >
+                🎯 Start Integration Tour
+              </button>
+              {integrations.length > 0 && (
+                <button
+                  onClick={handleSyncAll}
+                  disabled={syncing.all}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2"
+                >
+                  {syncing.all ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Syncing All...
+                    </>
+                  ) : (
+                    <>🔄 Sync All Platforms</>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-        {integrations.length > 0 && (
-          <button
-            onClick={handleSyncAll}
-            disabled={syncing.all}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
-          >
-            {syncing.all ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Syncing All...
-              </>
-            ) : (
-              <>🔄 Sync All Platforms</>
-            )}
-          </button>
-        )}
-      </div>
 
       {/* Liberation Context Banner */}
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-8">
@@ -241,17 +249,17 @@ export function IntegrationsPage({ ventureId }: IntegrationsPageProps) {
                       <span className="text-gray-500">Last sync: </span>
                       <span className={syncStatus.color}>{syncStatus.text}</span>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-4">
                       <button
                         onClick={() => handleSync(integration.platform)}
                         disabled={syncing[integration.platform]}
-                        className="px-3 py-1 text-sm bg-blue-50 text-blue-700 rounded hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                        className="px-4 py-2 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors font-medium"
                       >
                         {syncing[integration.platform] ? 'Syncing...' : 'Sync Now'}
                       </button>
                       <button
                         onClick={() => handleDisconnect(integration.platform)}
-                        className="px-3 py-1 text-sm bg-red-50 text-red-700 rounded hover:bg-red-100 transition-colors"
+                        className="px-4 py-2 text-sm bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors font-medium"
                       >
                         Disconnect
                       </button>
@@ -283,7 +291,7 @@ export function IntegrationsPage({ ventureId }: IntegrationsPageProps) {
               const platformInfo = integrationsApi.getPlatformInfo(platform.platform)
               
               return (
-                <div key={platform.platform} className="bg-white border-2 border-dashed border-gray-200 rounded-lg p-6 hover:border-green-300 hover:bg-green-50 transition-all cursor-pointer group">
+                <div key={platform.platform} className="bg-white border-2 border-solid border-gray-200 rounded-xl p-8 hover:border-green-400 hover:bg-green-50 hover:shadow-lg transition-all duration-200 cursor-pointer group">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="text-3xl group-hover:scale-110 transition-transform">{platformInfo.icon}</div>
                     <div>
@@ -340,6 +348,7 @@ export function IntegrationsPage({ ventureId }: IntegrationsPageProps) {
           }}
         />
       )}
+      </div>
     </div>
   )
 }

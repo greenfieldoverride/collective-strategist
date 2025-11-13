@@ -87,6 +87,9 @@
 .min-h-\[200px\] {
   min-height: 200px;
 }
+.min-h-screen {
+  min-height: 100vh;
+}
 .w-1\/4 {
   width: calc(1/4 * 100%);
 }
@@ -192,8 +195,23 @@
   --tw-border-style: dashed;
   border-style: dashed;
 }
+.border-solid {
+  --tw-border-style: solid;
+  border-style: solid;
+}
 .border-t-transparent {
   border-top-color: transparent;
+}
+.bg-gradient-to-br {
+  --tw-gradient-position: to bottom right in oklab;
+  background-image: linear-gradient(var(--tw-gradient-stops));
+}
+.bg-gradient-to-r {
+  --tw-gradient-position: to right in oklab;
+  background-image: linear-gradient(var(--tw-gradient-stops));
+}
+.bg-clip-text {
+  background-clip: text;
 }
 .object-cover {
   object-fit: cover;
@@ -209,6 +227,9 @@
 }
 .whitespace-pre-wrap {
   white-space: pre-wrap;
+}
+.text-transparent {
+  color: transparent;
 }
 .capitalize {
   text-transform: capitalize;
@@ -257,12 +278,26 @@
   transition-timing-function: var(--tw-ease, ease);
   transition-duration: var(--tw-duration, 0s);
 }
+.duration-200 {
+  --tw-duration: 200ms;
+  transition-duration: 200ms;
+}
 .group-hover\:scale-110 {
   &:is(:where(.group):hover *) {
     @media (hover: hover) {
       --tw-scale-x: 110%;
       --tw-scale-y: 110%;
       --tw-scale-z: 110%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+  }
+}
+.hover\:scale-105 {
+  &:hover {
+    @media (hover: hover) {
+      --tw-scale-x: 105%;
+      --tw-scale-y: 105%;
+      --tw-scale-z: 105%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
   }
@@ -459,6 +494,10 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-scale-x {
   syntax: "*";
   inherits: false;
@@ -513,6 +552,7 @@
       --tw-drop-shadow-color: initial;
       --tw-drop-shadow-alpha: 100%;
       --tw-drop-shadow-size: initial;
+      --tw-duration: initial;
       --tw-scale-x: 1;
       --tw-scale-y: 1;
       --tw-scale-z: 1;
