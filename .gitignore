@@ -63,3 +63,5 @@ services/liberation-guardian/
 
 # Server environment file with real credentials
 .env.server
+.env.production
+.env.production.*
